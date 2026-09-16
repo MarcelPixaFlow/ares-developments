@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import heroImage from "@/assets/mars-hero.jpg.asset.json";
+import heroImage from "@/assets/mars-hero.jpg";
 import { SiteNav } from "@/features/site/SiteNav";
 import { AresLogo } from "@/features/site/AresLogo";
 import { ContactCta } from "@/features/site/ContactCta";
@@ -34,7 +34,7 @@ function Index() {
         {/* Hero */}
         <section className="relative flex min-h-screen items-center justify-center overflow-hidden">
           <img
-            src={heroImage.url}
+            src={heroImage}
             alt="Paisagem rochosa de Marte no Arcana Valley ao entardecer"
             className="absolute inset-0 h-full w-full object-cover"
           />
