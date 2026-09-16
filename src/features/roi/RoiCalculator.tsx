@@ -58,7 +58,7 @@ export function RoiCalculator() {
             <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground">
               {row.horizon}
             </p>
-            <p className="mt-6 font-serif text-2xl text-foreground sm:text-3xl">
+            <p className="mt-6 break-words font-serif text-xl text-foreground lg:text-2xl">
               {row.value}
             </p>
             <p className="mt-3 text-sm text-primary">{row.growthLabel}</p>
