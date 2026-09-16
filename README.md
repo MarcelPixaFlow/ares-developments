@@ -1,24 +1,51 @@
 # Ares Mars Investments
 
-Context: Build a premium corporate landing page for Ares Developments, presenting a fictional/speculative real-estate investment thesis involving Mars to C-level executives. The visual language should resemble an elite investment fund or luxury real-estate firm: restrained, sophisticated, data-driven, and highly polished. Goal: Build a single-page corporate landing page that presents the Mars investment thesis, an interactive ROI projection calculator, four anchor projects, and a clear contact CTA. Flow: discover the thesis in the hero → explore illustrative ROI projections → review the four projects → contact a specialist. Pages: single landing page with anchored sections for Hero, ROI Calculator, Portfolio, and Footer. Core screen: full-viewport Mars rocky landscape hero with a dark overlay, Ares Developments logo, discreet navbar links, centered serif headline “Marte: O Próximo Grande Salto Para Seu Portfólio.”, subtitle “Investimento exclusivo em terrenos e projetos primordiais no Arcana Valley.”, primary CTA “Falar com Especialista”, and a transparent secondary CTA. Features: Add a working investment input in USD and dynamically calculate displayed projected values for 10 years (450%), 20 years (1.200%), and 50 years (5.000%); build four standardized project cards with image, title and description; add smooth anchor navigation and responsive mobile navigation; add a contact CTA suitable for a corporate lead; add subtle hover/focus interactions without excessive animation. Portfolio projects: “Ares Colony” — “Complexo habitacional de alta densidade e biosfera controlada.”; “Habitats Modulares” — “Instalações de luxo para executivos e pesquisadores.”; “Mars Retail Arcology” — “Mega complexo comercial e de entretenimento para turismo interplanetário.”; “Centro Médico de Excelência” — “Infraestrutura de saúde de ponta garantindo biossegurança total.” Data: ROI projections are illustrative/demo values, not guaranteed returns; clearly label them as hypothetical projections and include a discreet “Resultados não garantidos” / “Projeções meramente ilustrativas” disclaimer near the calculator. Design: dark mode with #0F0F11 main background and #1A1A1D section/card surfaces, deep rust/dark red primary accent, off-white text, Inter or Roboto for body copy and an elegant serif such as Playfair Display for major headings; use Tailwind CSS, generous spacing, 12-column desktop grid, restrained borders, subtle shadows, cinematic imagery, excellent mobile responsiveness, accessibility, and premium editorial composition. Hero image: use the provided Mars rocky landscape image if available in the project/assets; otherwise create a visually appropriate image placeholder that is easy to replace. Portfolio images: use the user-provided assets for the domed base, interior with window, shopping complex, and hospital; preserve their intended mapping to the four projects. Constraints: use a feature-based folder structure; separate UI from business logic; prefer reusable components over one-offs; avoid duplicated state (single source of truth); keep components modular and maintainable. Do not invent testimonials, clients, certifications, regulatory approvals, performance history, or claims of actual Mars land ownership. Do not
+Este projeto foi construído com o [Lovable](https://lovable.dev)[cite: 1].
 
-This project was built with [Lovable](https://lovable.dev).
+## Visão Geral do Projeto
 
-## Build with Lovable
+*   **Contexto:** Construção de uma landing page corporativa premium para a Ares Developments, apresentando uma tese de investimento imobiliário fictícia/especulativa em Marte para executivos C-level[cite: 1]. A linguagem visual se assemelha a um fundo de investimento de elite ou imobiliária de luxo: contida, sofisticada, orientada a dados e altamente polida[cite: 1].
+*   **Objetivo:** Desenvolver uma landing page de página única (single-page) que apresente a tese de investimento em Marte, uma calculadora interativa de projeção de ROI, quatro projetos âncora e um Call to Action (CTA) claro para contato[cite: 1].
+*   **Fluxo do Usuário:** Descobrir a tese no Hero → explorar projeções ilustrativas de ROI → revisar os quatro projetos → contatar um especialista[cite: 1].
+*   **Páginas:** Página única (single-page) com navegação âncora para as seções: Hero, Calculadora de ROI, Portfólio e Rodapé (Footer)[cite: 1].
 
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/51d5e833-fc80-4d3c-857a-39fa8dd77f92).
+## Interface e Funcionalidades (Features)
 
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
+*   **Hero Section (Tela Principal):** Fundo ocupando toda a tela (full-viewport) com a imagem da paisagem rochosa de Marte e um overlay escuro[cite: 1]. Inclui o logo da Ares Developments, links de navegação discretos, título centralizado com fonte serifada ("Marte: O Próximo Grande Salto Para Seu Portfólio.") e subtítulo focado em investimentos[cite: 1]. Conta com um CTA primário ("Falar com Especialista") e um CTA secundário transparente[cite: 1].
+*   **Calculadora de ROI:** Input interativo para valores de investimento em dólares (USD) com cálculo dinâmico das projeções exibidas para 10 anos (450%), 20 anos (1.200%) e 50 anos (5.000%)[cite: 1]. 
+*   **Aviso Legal (Disclaimer):** Os valores de ROI são ilustrativos[cite: 1]. Inclui selos de "Resultados não garantidos" ou "Projeções meramente ilustrativas" próximos à calculadora[cite: 1].
+*   **Portfólio de Projetos:** Quatro cards padronizados contendo imagem, título e descrição para os seguintes projetos: "Ares Colony", "Habitats Modulares", "Mars Retail Arcology" e "Centro Médico de Excelência"[cite: 1]. As imagens fornecidas devem mapear perfeitamente para seus respectivos projetos[cite: 1].
+*   **Interatividade:** Navegação âncora suave, responsividade excelente para dispositivos móveis e interações sutis de hover/focus (sem animações excessivas)[cite: 1].
 
-## Development
+## Design System e UI
 
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
+*   **Tema:** Dark mode com fundo principal em `#0F0F11` e superfícies de seções/cards em `#1A1A1D`[cite: 1].
+*   **Cores:** Acento primário em vermelho escuro/ferrugem profundo (deep rust) e textos em branco quebrado (off-white)[cite: 1].
+*   **Tipografia:** `Inter` ou `Roboto` para o corpo do texto e uma fonte serifada elegante (como `Playfair Display`) para os títulos principais[cite: 1].
+*   **Estrutura:** Desenvolvido com Tailwind CSS, espaçamentos generosos, grid de 12 colunas no desktop, bordas contidas e sombras sutis[cite: 1].
+
+## Arquitetura e Restrições Técnicas
+
+*   **Estrutura de Pastas:** Baseada em funcionalidades (feature-based)[cite: 1].
+*   **Boas Práticas:** Separação clara entre UI e lógica de negócios, preferência por componentes reutilizáveis, eliminação de estados duplicados (single source of truth) e manutenção de componentes modulares[cite: 1].
+*   **Restrições de Conteúdo:** Não inventar depoimentos falsos, clientes, certificações, aprovações regulatórias, histórico de performance ou alegações de propriedade real de terras em Marte[cite: 1].
+
+---
+
+## Desenvolvido com Lovable
+
+Continue desenvolvendo este projeto no [editor do Lovable](https://lovable.dev/projects/51d5e833-fc80-4d3c-857a-39fa8dd77f92)[cite: 1].
+
+*   **Entregue mais rápido:** descreva o que você deseja construir e o Lovable cuida do código[cite: 1].
+*   **Sempre sincronizado:** cada alteração feita no Lovable é commitada diretamente neste repositório[cite: 1].
+*   **Controle total:** este código é seu[cite: 1]. Faça um push para a branch `main` no GitHub e suas alterações serão sincronizadas de volta ao Lovable, prontas para o seu próximo prompt[cite: 1].
+
+## Desenvolvimento Local
+
+Prefere trabalhar localmente? Você precisará do Node.js e do npm — [instale com o nvm](https://github.com/nvm-sh/nvm#installing-and-updating)[cite: 1].
 
 ```sh
-git clone <this-repository-url>
-cd <repository-name>
+git clone <url-deste-repositorio>
+cd <nome-do-repositorio>
 npm i
 npm run dev
-```
