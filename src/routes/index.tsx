@@ -72,7 +72,7 @@ function Index() {
 
         {/* Thesis */}
         <section id="tese" className="border-t border-border">
-          <div className="mx-auto max-w-7xl px-6 py-28 lg:px-10 lg:py-36">
+          <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-24">
             <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
               <div className="lg:col-span-4">
                 <p className="text-[10px] uppercase tracking-[0.35em] text-primary">
@@ -109,9 +109,67 @@ function Index() {
           </div>
         </section>
 
+        <section id="veiculo" className="border-t border-border">
+          <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-24">
+            <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
+              <div className="lg:col-span-4">
+                <p className="text-[10px] uppercase tracking-[0.35em] text-primary">
+                  Sítio e veículo
+                </p>
+                <h2 className="mt-6 font-serif text-3xl leading-tight text-foreground sm:text-4xl">
+                  Por que o flanco leste.
+                </h2>
+              </div>
+              <div className="grid gap-10 lg:col-span-8">
+                <div className="border-t border-border pt-6">
+                  <h3 className="font-serif text-lg text-foreground">Por que o flanco leste</h3>
+                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                    Arcana Valley é um corredor baixo, contínuo, no hemisfério que a tese
+                    trata como porta de entrada logística. O flanco leste (AV-HX-01) encosta
+                    em platô para campo solar, depressão para extração hídrica e linha de
+                    aproximação para pista. A escassez não é “Marte inteiro”; é a borda útil
+                    desse corredor.
+                  </p>
+                </div>
+                <div className="border-t border-border pt-6">
+                  <h3 className="font-serif text-lg text-foreground">O veículo (conceitual)</h3>
+                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                    Alocação fechada, fora de mercado, para family office e institucional.
+                    Lock-up alinhado ao horizonte geracional — liquidez esperada em décadas,
+                    não em trimestres. Não há cota negociável, lastro registral nem direito
+                    real sobre o solo marciano. O que se descreve é exposição conceitual a um
+                    sítio e aos âncoras que o programam.
+                  </p>
+                </div>
+                <div className="border-t border-border pt-6">
+                  <h3 className="font-serif text-lg text-foreground">Cronograma hipotético</h3>
+                  <ul className="mt-4 grid gap-4 text-sm leading-relaxed text-muted-foreground">
+                    <li>
+                      <span className="text-foreground">2030–2038.</span> Terra crua, sítio,
+                      energia e água em escala de estudo.
+                    </li>
+                    <li>
+                      <span className="text-foreground">2038–2050.</span> Habitats modulares e
+                      primeiros âncoras (saúde, logística).
+                    </li>
+                    <li>
+                      <span className="text-foreground">2050–2065.</span> Cidadela Helios como
+                      hub; retail e colônia como demanda derivada.
+                    </li>
+                    <li>
+                      <span className="text-foreground">2065–2080.</span> Janela hipotética de
+                      liquidez secundária. Sem garantia de evento de saída.
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* ROI */}
         <section id="projecoes" className="border-t border-border bg-card/40">
-          <div className="mx-auto max-w-7xl px-6 py-28 lg:px-10 lg:py-36">
+          <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-24">
             <p className="text-[10px] uppercase tracking-[0.35em] text-primary">
               Projeções Hipotéticas
             </p>
@@ -126,7 +184,7 @@ function Index() {
 
         {/* Portfolio */}
         <section id="portfolio" className="border-t border-border">
-          <div className="mx-auto max-w-7xl px-6 py-28 lg:px-10 lg:py-36">
+          <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-24">
             <p className="text-[10px] uppercase tracking-[0.35em] text-primary">
               Portfólio
             </p>
@@ -145,7 +203,7 @@ function Index() {
 
         {/* Contact */}
         <section id="contato" className="border-t border-border bg-card/40">
-          <div className="mx-auto max-w-7xl px-6 py-28 lg:px-10 lg:py-36">
+          <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-24">
             <ContactCta />
           </div>
         </section>

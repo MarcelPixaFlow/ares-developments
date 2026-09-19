@@ -86,9 +86,7 @@ export function ContactCta() {
           Converse com um especialista da Ares
         </h2>
         <p className="mt-5 max-w-xl text-sm leading-relaxed text-muted-foreground">
-          Atendimento dedicado a investidores institucionais e family offices.
-          Apresentamos a tese, a estrutura do veículo e o cronograma de alocação
-          em reunião privada.
+          Reunião privada sobre a tese e o veículo descritos acima.
         </p>
         <p className="mt-6 max-w-xl text-xs leading-relaxed text-muted-foreground">
           Este formulário não envia e-mail e não há backend neste conceito.

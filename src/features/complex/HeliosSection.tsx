@@ -12,7 +12,7 @@ export function HeliosSection() {
 
   return (
     <section id="cidadela" className="border-t border-border">
-      <div className="mx-auto max-w-7xl px-6 py-28 lg:px-10 lg:py-36">
+      <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-24">
         <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
           <div className="lg:col-span-5">
             <p className="text-[10px] uppercase tracking-[0.35em] text-primary">
@@ -34,10 +34,28 @@ export function HeliosSection() {
                   Zona selecionada
                 </p>
                 <h3 className="mt-3 font-serif text-xl text-foreground">{selected.title}</h3>
-                <p className="mt-2 text-sm text-muted-foreground">{selected.summary}</p>
-                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                  {selected.description}
-                </p>
+                <dl className="mt-4 grid gap-4 text-sm">
+                  <div>
+                    <dt className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+                      Uso
+                    </dt>
+                    <dd className="mt-1 text-muted-foreground">{selected.use}</dd>
+                  </div>
+                  <div>
+                    <dt className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+                      Adjacências
+                    </dt>
+                    <dd className="mt-1 text-muted-foreground">{selected.adjacencies}</dd>
+                  </div>
+                  <div>
+                    <dt className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+                      Programa
+                    </dt>
+                    <dd className="mt-1 leading-relaxed text-muted-foreground">
+                      {selected.program}
+                    </dd>
+                  </div>
+                </dl>
               </div>
             )}
 
