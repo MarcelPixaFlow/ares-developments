@@ -22,7 +22,7 @@ export const scenarios: Scenario[] = [
     id: "atraso",
     label: "Atraso",
     title: "Atraso",
-    body: "Janela de pouso, energia e água escorrega uma geração. Terra crua permanece illiquid por mais tempo. O múltiplo de 10 anos é quase só optionality; o de 50 anos não alcança o Base.",
+    body: "A janela de pouso, energia e água escorrega uma geração. A terra crua permanece ilíquida por mais tempo. O múltiplo de 10 anos é quase só uma opção; o de 50 anos não alcança o cenário Base.",
     projections: [
       { id: "y10", horizon: "10 anos", years: 10, growthLabel: "+120%", multiplier: 2.2 },
       { id: "y20", horizon: "20 anos", years: 20, growthLabel: "+450%", multiplier: 5.5 },
@@ -33,7 +33,7 @@ export const scenarios: Scenario[] = [
     id: "base",
     label: "Base",
     title: "Base",
-    body: "Corredor logístico do Arcana Valley recebe âncoras no ritmo da tese: primeiros habitats na década de 2030, Cidadela como hub na de 2040, liquidez residual só em horizonte geracional. Re-rating concentrado nos primeiros 10–20 anos; depois o múltiplo cresce mais devagar (CAGR implícito decrescente: 10a ≈ 18,6% a.a. · 20a ≈ 13,7% a.a. · 50a ≈ 8,2% a.a.).",
+    body: "O corredor logístico do Arcana Valley recebe âncoras no ritmo da tese: primeiros habitats na década de 2030, Cidadela como hub na de 2040, liquidez residual só em horizonte geracional. A reprecificação se concentra nos primeiros 10–20 anos; depois o múltiplo cresce mais devagar (CAGR implícito: 10a ≈ 18,6% a.a.; 20a ≈ 13,7% a.a.; 50a ≈ 8,2% a.a.).",
     projections: [
       { id: "y10", horizon: "10 anos", years: 10, growthLabel: "+450%", multiplier: 5.5 },
       { id: "y20", horizon: "20 anos", years: 20, growthLabel: "+1.200%", multiplier: 13 },
@@ -44,7 +44,7 @@ export const scenarios: Scenario[] = [
     id: "antecipada",
     label: "Antecipada",
     title: "Antecipada",
-    body: "Energia, extração hídrica e pista entram antes do desenho-base. Âncoras (colônia, saúde, retail) antecipam demanda derivada. Continua especulativo: execução, titularidade e saída não existem.",
+    body: "Energia, extração hídrica e pista entram antes do desenho-base. Os âncoras (colônia, saúde, varejo) antecipam demanda derivada. Continua especulativo: execução, titularidade e saída não existem.",
     projections: [
       { id: "y10", horizon: "10 anos", years: 10, growthLabel: "+700%", multiplier: 8 },
       { id: "y20", horizon: "20 anos", years: 20, growthLabel: "+2.100%", multiplier: 22 },

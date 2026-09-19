@@ -154,7 +154,7 @@ function Index() {
                     </li>
                     <li>
                       <span className="text-foreground">2050–2065.</span> Cidadela Helios como
-                      hub; retail e colônia como demanda derivada.
+                      hub; varejo e colônia como demanda derivada.
                     </li>
                     <li>
                       <span className="text-foreground">2065–2080.</span> Janela hipotética de

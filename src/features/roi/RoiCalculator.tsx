@@ -188,8 +188,8 @@ export function RoiCalculator() {
         <p className="text-[10px] uppercase tracking-[0.35em] text-primary">Premissas</p>
         <h3 className="mt-3 font-serif text-2xl text-foreground">Premissas ilustrativas</h3>
         <p className="mt-4 max-w-3xl text-sm leading-relaxed text-muted-foreground">
-          Exercício hipotético. Não há fluxo de caixa, título ou mercado. O motor é um
-          múltiplo de terminal value sobre o capital de entrada, não uma DCF.
+          Exercício hipotético. Não há fluxo de caixa, título nem mercado. O motor é um
+          múltiplo de valor terminal sobre o capital de entrada — não uma DCF.
         </p>
         <div className="mt-8 grid gap-8 md:grid-cols-3">
           {scenarios.map((item) => (
