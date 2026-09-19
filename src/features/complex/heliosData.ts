@@ -15,7 +15,7 @@ export const heliosComplex = {
   code: "AV-HX-01",
   location: "Flanco leste do Arcana Valley",
   blurb:
-    "Novo âncora do portfólio: um hub de pesquisa, energia e logística. O mapa 3D é a maquete de sítio — as três vistas ao lado devem ser renders a partir desta planta, não fotos inventadas.",
+    "Novo âncora do portfólio: hub de pesquisa, energia e logística no flanco leste. A maquete 3D é a planta de sítio — volumes, adjacências e circulação de superfície, em escala de estudo.",
 };
 
 export const heliosZones: HeliosZone[] = [

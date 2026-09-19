@@ -15,13 +15,13 @@ export const projections: Projection[] = [
 export const projectValue = (amount: number, multiplier: number) =>
   Math.max(0, amount) * multiplier;
 
-const formatter = new Intl.NumberFormat("pt-BR", {
-  style: "currency",
-  currency: "USD",
+const numberFormatter = new Intl.NumberFormat("pt-BR", {
   maximumFractionDigits: 0,
 });
 
-export const formatUSD = (value: number) => formatter.format(value);
+export const formatUSDAmount = (value: number) => numberFormatter.format(value);
+
+export const formatUSD = (value: number) => `US$ ${formatUSDAmount(value)}`;
 
 export const parseAmount = (raw: string) => {
   const digits = raw.replace(/[^\d]/g, "");

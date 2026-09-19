@@ -71,7 +71,7 @@ function Index() {
         </section>
 
         {/* Thesis */}
-        <section id="tese" className="scroll-mt-24 border-t border-border">
+        <section id="tese" className="border-t border-border">
           <div className="mx-auto max-w-7xl px-6 py-28 lg:px-10 lg:py-36">
             <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
               <div className="lg:col-span-4">
@@ -110,7 +110,7 @@ function Index() {
         </section>
 
         {/* ROI */}
-        <section id="projecoes" className="scroll-mt-24 border-t border-border bg-card/40">
+        <section id="projecoes" className="border-t border-border bg-card/40">
           <div className="mx-auto max-w-7xl px-6 py-28 lg:px-10 lg:py-36">
             <p className="text-[10px] uppercase tracking-[0.35em] text-primary">
               Projeções Hipotéticas
@@ -125,7 +125,7 @@ function Index() {
         </section>
 
         {/* Portfolio */}
-        <section id="portfolio" className="scroll-mt-24 border-t border-border">
+        <section id="portfolio" className="border-t border-border">
           <div className="mx-auto max-w-7xl px-6 py-28 lg:px-10 lg:py-36">
             <p className="text-[10px] uppercase tracking-[0.35em] text-primary">
               Portfólio
@@ -144,7 +144,7 @@ function Index() {
         <HeliosSection />
 
         {/* Contact */}
-        <section id="contato" className="scroll-mt-24 border-t border-border bg-card/40">
+        <section id="contato" className="border-t border-border bg-card/40">
           <div className="mx-auto max-w-7xl px-6 py-28 lg:px-10 lg:py-36">
             <ContactCta />
           </div>

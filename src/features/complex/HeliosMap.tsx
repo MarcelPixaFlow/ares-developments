@@ -544,14 +544,21 @@ export function HeliosMap({ selectedZoneId, onSelectZone }: HeliosMapProps) {
 
   return (
     <div ref={wrapRef} className="absolute inset-0 bg-[#0C0B0D]">
-      <canvas ref={canvasRef} className="h-full w-full touch-none" />
+      <canvas
+        ref={canvasRef}
+        className="h-full w-full touch-none"
+        role="img"
+        aria-label="Maquete 3D da Cidadela Helios. Arraste para orbitar. Clique em um volume para selecionar a zona."
+        tabIndex={0}
+      />
       <button
         type="button"
+        aria-label="Baixar vista atual da maquete em PNG"
         onClick={() => {
           const canvas = canvasRef.current;
           if (canvas) downloadCanvas(canvas);
         }}
-        className="absolute right-4 top-4 z-10 border border-white/20 bg-black/55 px-3 py-2 text-[10px] uppercase tracking-[0.2em] text-white/85 backdrop-blur-sm transition-colors hover:border-white/50"
+        className="absolute right-4 top-4 z-10 border border-white/20 bg-black/55 px-3 py-2 text-[10px] uppercase tracking-[0.2em] text-white/85 backdrop-blur-sm transition-colors hover:border-white/50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
       >
         Baixar vista PNG
       </button>

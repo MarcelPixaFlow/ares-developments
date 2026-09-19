@@ -11,7 +11,7 @@ export function HeliosSection() {
   const openView = heliosViewSlots.find((slot) => slot.id === openViewId);
 
   return (
-    <section id="cidadela" className="scroll-mt-24 border-t border-border">
+    <section id="cidadela" className="border-t border-border">
       <div className="mx-auto max-w-7xl px-6 py-28 lg:px-10 lg:py-36">
         <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
           <div className="lg:col-span-5">
@@ -29,7 +29,7 @@ export function HeliosSection() {
             </p>
 
             {selected && (
-              <div className="mt-10 border-t border-border pt-6">
+              <div className="mt-10 border-t border-border pt-6" aria-live="polite">
                 <p className="text-[10px] uppercase tracking-[0.3em] text-primary">
                   Zona selecionada
                 </p>
@@ -41,32 +41,61 @@ export function HeliosSection() {
               </div>
             )}
 
-            <ul className="mt-8 grid gap-2 sm:grid-cols-2">
+            <div
+              role="radiogroup"
+              aria-label="Zonas da planta de sítio"
+              className="mt-8 grid gap-2 sm:grid-cols-2"
+            >
               {heliosZones.map((zone) => {
                 const active = zone.id === selectedZoneId;
                 return (
-                  <li key={zone.id}>
-                    <button
-                      type="button"
-                      onClick={() => setSelectedZoneId(zone.id)}
-                      className={`w-full border px-4 py-3 text-left text-xs uppercase tracking-[0.16em] transition-colors ${
-                        active
-                          ? "border-primary bg-primary/10 text-foreground"
-                          : "border-border text-muted-foreground hover:border-primary/60 hover:text-foreground"
-                      }`}
-                    >
-                      {zone.title}
-                    </button>
-                  </li>
+                  <button
+                    key={zone.id}
+                    type="button"
+                    role="radio"
+                    aria-checked={active}
+                    aria-label={`Selecionar zona ${zone.title}`}
+                    data-zone-id={zone.id}
+                    onClick={() => setSelectedZoneId(zone.id)}
+                    onKeyDown={(event) => {
+                      if (
+                        event.key !== "ArrowRight" &&
+                        event.key !== "ArrowDown" &&
+                        event.key !== "ArrowLeft" &&
+                        event.key !== "ArrowUp"
+                      ) {
+                        return;
+                      }
+                      event.preventDefault();
+                      const index = heliosZones.findIndex((item) => item.id === selectedZoneId);
+                      const delta =
+                        event.key === "ArrowRight" || event.key === "ArrowDown" ? 1 : -1;
+                      const next =
+                        heliosZones[(index + delta + heliosZones.length) % heliosZones.length];
+                      if (!next) return;
+                      setSelectedZoneId(next.id);
+                      const node = event.currentTarget.parentElement?.querySelector<HTMLButtonElement>(
+                        `[data-zone-id="${next.id}"]`,
+                      );
+                      node?.focus();
+                    }}
+                    className={`w-full border px-4 py-3 text-left text-xs uppercase tracking-[0.16em] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ${
+                      active
+                        ? "border-primary bg-primary/10 text-foreground"
+                        : "border-border text-muted-foreground hover:border-primary/60 hover:text-foreground"
+                    }`}
+                  >
+                    {zone.title}
+                  </button>
                 );
               })}
-            </ul>
+            </div>
           </div>
 
           <div className="lg:col-span-7">
             <div className="relative h-[min(72vh,640px)] overflow-hidden border border-border bg-[#0F0F11]">
               <HeliosMap selectedZoneId={selectedZoneId} onSelectZone={setSelectedZoneId} />
-              <p className="pointer-events-none absolute bottom-4 left-4 text-[10px] uppercase tracking-[0.25em] text-white/55">
+              <p className="pointer-events-none absolute bottom-4 left-4 max-w-[70%] text-[10px] uppercase tracking-[0.25em] text-white/55">
                 Arraste para orbitar · clique num volume para selecionar
               </p>
             </div>
@@ -79,16 +108,17 @@ export function HeliosSection() {
               <button
                 type="button"
                 onClick={() => setOpenViewId(slot.id)}
-                className="block w-full text-left"
+                aria-label={`Ampliar ${slot.label}, recorte de estudo da maquete`}
+                className="block w-full text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
               >
                 <img
                   src={slot.image}
-                  alt={slot.label}
+                  alt={`${slot.label} — recorte de estudo da maquete`}
                   className="aspect-[16/10] h-auto w-full object-cover"
                 />
               </button>
               <figcaption className="px-4 py-3 text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-                {slot.label} · clique para ampliar
+                {slot.label} · vista de estudo
               </figcaption>
             </figure>
           ))}
@@ -99,10 +129,12 @@ export function HeliosSection() {
         <DialogContent className="max-w-6xl border-border bg-[#0F0F11] p-0 sm:rounded-none">
           {openView && (
             <>
-              <DialogTitle className="sr-only">{openView.label}</DialogTitle>
+              <DialogTitle className="sr-only">
+                {openView.label} — recorte de estudo da maquete
+              </DialogTitle>
               <img
                 src={openView.image}
-                alt={openView.label}
+                alt={`${openView.label} — recorte de estudo da maquete`}
                 className="max-h-[88vh] w-full object-contain"
               />
             </>
