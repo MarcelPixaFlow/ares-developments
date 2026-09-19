@@ -28,6 +28,7 @@ const chartConfig = {
 export function RoiCalculator() {
   const [amount, setAmount] = useState(250000);
   const [scenarioId, setScenarioId] = useState<ScenarioId>("base");
+  const [showPremises, setShowPremises] = useState(false);
   const scenario = getScenario(scenarioId);
 
   const rows = useMemo(
@@ -121,9 +122,6 @@ export function RoiCalculator() {
             );
           })}
         </div>
-        <p id="roi-disclaimer" className="mt-8 text-xs leading-relaxed text-muted-foreground">
-          Projeções meramente ilustrativas. Resultados não garantidos.
-        </p>
       </div>
 
       <div className="lg:col-span-7">
@@ -143,6 +141,9 @@ export function RoiCalculator() {
             </div>
           ))}
         </div>
+        <p id="roi-disclaimer" className="mt-4 text-xs leading-relaxed text-muted-foreground">
+          Projeções meramente ilustrativas. Resultados não garantidos.
+        </p>
 
         <div className="mt-8 border border-border bg-card p-4 sm:p-6">
           <p className="text-[10px] uppercase tracking-[0.25em] text-muted-foreground">
@@ -178,27 +179,39 @@ export function RoiCalculator() {
               />
             </AreaChart>
           </ChartContainer>
-          <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
-            Projeções meramente ilustrativas. Resultados não garantidos.
-          </p>
         </div>
       </div>
 
       <div className="border-t border-border pt-8 lg:col-span-12">
-        <p className="text-[10px] uppercase tracking-[0.35em] text-primary">Premissas</p>
-        <h3 className="mt-3 font-serif text-2xl text-foreground">Premissas ilustrativas</h3>
-        <p className="mt-4 max-w-3xl text-sm leading-relaxed text-muted-foreground">
-          Exercício hipotético. Não há fluxo de caixa, título nem mercado. O motor é um
-          múltiplo de valor terminal sobre o capital de entrada — não uma DCF.
-        </p>
-        <div className="mt-8 grid gap-8 md:grid-cols-3">
-          {scenarios.map((item) => (
-            <div key={item.id} className="border-t border-border pt-5">
-              <h4 className="font-serif text-lg text-foreground">{item.title}</h4>
-              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{item.body}</p>
+        <button
+          type="button"
+          onClick={() => setShowPremises((open) => !open)}
+          aria-expanded={showPremises}
+          aria-controls="roi-premissas"
+          className="text-xs uppercase tracking-[0.2em] text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+        >
+          {showPremises ? "Ocultar premissas" : "Ver premissas"}
+        </button>
+        {showPremises && (
+          <div id="roi-premissas">
+            <p className="mt-6 text-[10px] uppercase tracking-[0.35em] text-primary">
+              Premissas
+            </p>
+            <h3 className="mt-3 font-serif text-2xl text-foreground">Premissas ilustrativas</h3>
+            <p className="mt-4 max-w-3xl text-sm leading-relaxed text-muted-foreground">
+              Exercício hipotético. Não há fluxo de caixa, título nem mercado. O motor é um
+              múltiplo de valor terminal sobre o capital de entrada — não uma DCF.
+            </p>
+            <div className="mt-8 grid gap-8 md:grid-cols-3">
+              {scenarios.map((item) => (
+                <div key={item.id} className="border-t border-border pt-5">
+                  <h4 className="font-serif text-lg text-foreground">{item.title}</h4>
+                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{item.body}</p>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );

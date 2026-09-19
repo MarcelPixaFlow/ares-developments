@@ -45,8 +45,8 @@ export const projects: Project[] = [
     image: modularHabitats,
     status: "Conceito",
     program:
-      "Unidades de estadia para equipe executiva e pesquisa, plugadas em energia e ar da malha.",
-    demand: "Ocupação temporária de alto valor no sítio, antes da colônia cheia.",
+      "Unidades de estadia para equipe e pesquisa, ligadas à malha de energia e ar.",
+    demand: "Ocupação temporária de alto valor, antes da colônia cheia.",
   },
   {
     id: "mars-retail-arcology",
@@ -62,9 +62,8 @@ export const projects: Project[] = [
     image: retailArcology,
     status: "Conceito",
     program:
-      "Volume comercial e de encontro sob cúpula, dependente de fluxo de pessoas que ainda não existe.",
-    demand:
-      "Só faz sentido depois dos âncoras de morar, saúde e logística. Último na fila.",
+      "Volume comercial e de encontro sob cúpula, dependente de fluxo que ainda não existe.",
+    demand: "Só depois dos âncoras de morar, saúde e logística. Último na fila.",
   },
   {
     id: "centro-medico",
@@ -73,7 +72,7 @@ export const projects: Project[] = [
     image: medicalCenter,
     images: [medicalCenter, medicalCenterTrans, medicalCenterZoomIn],
     status: "Sítio",
-    program: "Infraestrutura de biossegurança e cuidado para população de operação.",
+    program: "Biossegurança e cuidado para a população de operação.",
     demand: "Condição de permanência no vale, não amenidade.",
   },
 ];

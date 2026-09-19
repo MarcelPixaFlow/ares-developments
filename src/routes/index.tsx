@@ -116,7 +116,7 @@ function Index() {
                   Sítio e veículo
                 </p>
                 <h2 className="mt-6 font-serif text-3xl leading-tight text-foreground sm:text-4xl">
-                  Por que o flanco leste.
+                  O sítio e o veículo.
                 </h2>
               </div>
               <div className="grid gap-10 lg:col-span-8">

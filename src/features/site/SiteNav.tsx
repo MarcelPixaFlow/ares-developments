@@ -3,6 +3,7 @@ import { AresLogo } from "./AresLogo";
 
 const links = [
   { href: "#tese", label: "Tese" },
+  { href: "#veiculo", label: "Sítio" },
   { href: "#projecoes", label: "Projeções" },
   { href: "#portfolio", label: "Portfólio" },
   { href: "#cidadela", label: "Cidadela Helios" },
