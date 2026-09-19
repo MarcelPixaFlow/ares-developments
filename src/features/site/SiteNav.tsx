@@ -5,6 +5,7 @@ const links = [
   { href: "#tese", label: "Tese" },
   { href: "#projecoes", label: "Projeções" },
   { href: "#portfolio", label: "Portfólio" },
+  { href: "#cidadela", label: "Cidadela Helios" },
   { href: "#contato", label: "Contato" },
 ];
 

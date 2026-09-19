@@ -6,6 +6,7 @@ import { ContactCta } from "@/features/site/ContactCta";
 import { RoiCalculator } from "@/features/roi/RoiCalculator";
 import { ProjectCard } from "@/features/portfolio/ProjectCard";
 import { projects } from "@/features/portfolio/data";
+import { HeliosSection } from "@/features/complex/HeliosSection";
 
 const title = "Ares Developments — Marte: O Próximo Grande Salto Para Seu Portfólio";
 const description =
@@ -130,7 +131,7 @@ function Index() {
               Portfólio
             </p>
             <h2 className="mt-6 max-w-2xl font-serif text-3xl leading-tight text-foreground sm:text-4xl">
-              Quatro projetos âncora no Arcana Valley.
+              Projetos âncora no Arcana Valley.
             </h2>
             <div className="mt-16 grid gap-8 sm:grid-cols-2">
               {projects.map((project) => (
@@ -139,6 +140,8 @@ function Index() {
             </div>
           </div>
         </section>
+
+        <HeliosSection />
 
         {/* Contact */}
         <section id="contato" className="scroll-mt-24 border-t border-border bg-card/40">
