@@ -4,31 +4,36 @@ Este projeto foi construído com o [Lovable](https://lovable.dev).
 
 ## Visão Geral do Projeto
 
-*   **Contexto:** Construção de uma landing page corporativa premium para a Ares Developments, apresentando uma tese de investimento imobiliário fictícia/especulativa em Marte para executivos C-level. A linguagem visual se assemelha a um fundo de investimento de elite ou imobiliária de luxo: contida, sofisticada, orientada a dados e altamente polida.
-*   **Objetivo:** Desenvolver uma landing page de página única (single-page) que apresente a tese de investimento em Marte, uma calculadora interativa de projeção de ROI, quatro projetos âncora e um Call to Action (CTA) claro para contato.
-*   **Fluxo do Usuário:** Descobrir a tese no Hero → explorar projeções ilustrativas de ROI → revisar os quatro projetos → contatar um especialista.
-*   **Páginas:** Página única (single-page) com navegação âncora para as seções: Hero, Calculadora de ROI, Portfólio e Rodapé (Footer).
+*   **Contexto:** Landing page corporativa premium para a Ares Developments, com uma tese de investimento imobiliário fictícia/especulativa em Marte (Arcana Valley) para executivos C-level. A linguagem visual se assemelha a um fundo de investimento de elite ou imobiliária de luxo: contida, sofisticada, orientada a dados e altamente polida.
+*   **Objetivo:** Página única que apresenta a tese, o sítio e o veículo conceitual, uma calculadora interativa de projeções ilustrativas, quatro projetos âncora, a Cidadela Helios (maquete 3D) e um CTA de contato.
+*   **Fluxo do Usuário:** Descobrir a tese no Hero → ler o sítio/veículo → simular projeções → revisar o portfólio → explorar a Cidadela Helios → registrar interesse.
+*   **Páginas:** Página única com navegação âncora: Hero, Tese, Sítio, Projeções, Portfólio, Cidadela Helios e Contato.
 
 ## Interface e Funcionalidades (Features)
 
-*   **Hero Section (Tela Principal):** Fundo ocupando toda a tela (full-viewport) com a imagem da paisagem rochosa de Marte e um overlay escuro. Inclui o logo da Ares Developments, links de navegação discretos, título centralizado com fonte serifada ("Marte: O Próximo Grande Salto Para Seu Portfólio.") e subtítulo focado em investimentos. Conta com um CTA primário ("Falar com Especialista") e um CTA secundário transparente.
-*   **Calculadora de ROI:** Input interativo para valores de investimento em dólares (USD) com cálculo dinâmico das projeções exibidas para 10 anos (450%), 20 anos (1.200%) e 50 anos (5.000%). 
-*   **Aviso Legal (Disclaimer):** Os valores de ROI são ilustrativos. Inclui selos de "Resultados não garantidos" ou "Projeções meramente ilustrativas" próximos à calculadora.
-*   **Portfólio de Projetos:** Quatro cards padronizados contendo imagem, título e descrição para os seguintes projetos: "Ares Colony", "Habitats Modulares", "Mars Retail Arcology" e "Centro Médico de Excelência". As imagens fornecidas devem mapear perfeitamente para seus respectivos projetos.
-*   **Interatividade:** Navegação âncora suave, responsividade excelente para dispositivos móveis e interações sutis de hover/focus (sem animações excessivas).
+*   **Hero:** Fundo full-viewport com a paisagem do Arcana Valley e overlay escuro. Logo Ares Developments, navegação discreta, título serifado (“Marte: O Próximo Grande Salto Para Seu Portfólio.”) e CTAs “Falar com Especialista” / “Ver Projeções”.
+*   **Tese:** Três pilares — escassez estrutural, horizonte geracional e natureza especulativa.
+*   **Sítio e veículo:** Por que o flanco leste (AV-HX-01), o veículo conceitual (alocação fechada, lock-up geracional) e um cronograma hipotético 2030–2080.
+*   **Calculadora de ROI:** Capital de entrada em USD, presets e três cenários ilustrativos (Atraso, Base, Antecipada) com horizontes de 10, 20 e 50 anos. O cenário Base permanece em +450% / +1.200% / +5.000%. Inclui gráfico de área e premissas expansíveis.
+*   **Aviso legal:** Projeções meramente ilustrativas; resultados não garantidos. Sem oferta de valores mobiliários nem titularidade real em Marte.
+*   **Portfólio:** Quatro âncoras com carrossel de imagens, status, programa e demanda: Ares Colony, Habitats Modulares, Mars Retail Arcology e Centro Médico de Excelência.
+*   **Cidadela Helios:** Novo âncora (AV-HX-01) no flanco leste. Maquete 3D interativa (Three.js) com zonas selecionáveis (núcleo, anel residencial, estufas, pista, solar, hídrica, logística, laboratórios) e vistas de estudo (aérea, oblíqua, núcleo).
+*   **Contato:** Formulário local (nome, e-mail, ticket, mensagem) persistido em `sessionStorage` — sem backend de envio.
+*   **Interatividade:** Navegação âncora suave, menu mobile, hover/focus contidos e responsividade para desktop e mobile.
 
 ## Design System e UI
 
-*   **Tema:** Dark mode com fundo principal em `#0F0F11` e superfícies de seções/cards em `#1A1A1D`.
-*   **Cores:** Acento primário em vermelho escuro/ferrugem profundo (deep rust) e textos em branco quebrado (off-white).
-*   **Tipografia:** `Inter` ou `Roboto` para o corpo do texto e uma fonte serifada elegante (como `Playfair Display`) para os títulos principais.
-*   **Estrutura:** Desenvolvido com Tailwind CSS, espaçamentos generosos, grid de 12 colunas no desktop, bordas contidas e sombras sutis.
+*   **Tema:** Dark mode. Fundo principal próximo de `#0F0F11` e superfícies/cards próximas de `#1A1A1D` (tokens em `oklch` no CSS).
+*   **Cores:** Acento primário em vermelho escuro/ferrugem; texto em off-white.
+*   **Tipografia:** `Inter` no corpo e `Playfair Display` nos títulos.
+*   **Estrutura:** Tailwind CSS, espaçamentos generosos, grid de 12 colunas no desktop, bordas contidas e sombras sutis.
 
 ## Arquitetura e Restrições Técnicas
 
-*   **Estrutura de Pastas:** Baseada em funcionalidades (feature-based).
-*   **Boas Práticas:** Separação clara entre UI e lógica de negócios, preferência por componentes reutilizáveis, eliminação de estados duplicados (single source of truth) e manutenção de componentes modulares.
-*   **Restrições de Conteúdo:** Não inventar depoimentos falsos, clientes, certificações, aprovações regulatórias, histórico de performance ou alegações de propriedade real de terras em Marte.
+*   **Stack:** React 19, TanStack Start / Router, Vite, Tailwind CSS 4, Three.js (Helios), Recharts (ROI).
+*   **Estrutura de pastas:** Feature-based em `src/features/` (`site`, `roi`, `portfolio`, `complex`).
+*   **Boas práticas:** Separação entre UI e lógica, componentes reutilizáveis, fonte única de verdade para projeções/projetos/Helios.
+*   **Restrições de conteúdo:** Não inventar depoimentos, clientes, certificações, aprovações regulatórias, histórico de performance ou alegações de propriedade real de terras em Marte.
 
 ---
 
@@ -49,3 +54,7 @@ git clone <url-deste-repositorio>
 cd <nome-do-repositorio>
 npm i
 npm run dev
+```
+
+Outros scripts: `npm run build`, `npm run preview`, `npm run lint`.
+
