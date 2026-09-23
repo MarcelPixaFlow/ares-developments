@@ -92,18 +92,21 @@ export const heliosViewSlots = [
     label: "Vista aérea",
     hint: "Planta a 90°",
     image: heliosAerial,
+    diagram: true,
   },
   {
     id: "obliqua",
     label: "Vista oblíqua",
     hint: "Câmera 35–45°",
     image: heliosOblique,
+    diagram: false,
   },
   {
     id: "nucleo",
     label: "Vista do núcleo",
     hint: "Torre em close",
     image: heliosTower,
+    diagram: false,
   },
 ] as const;
 

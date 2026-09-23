@@ -145,7 +145,7 @@ export function HeliosSection() {
                 />
               </button>
               <figcaption className="px-4 py-3 text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-                {slot.label} · vista de estudo
+                {slot.diagram ? "Planta aérea · diagrama de implantação" : `${slot.label} · vista de estudo`}
               </figcaption>
             </figure>
           ))}

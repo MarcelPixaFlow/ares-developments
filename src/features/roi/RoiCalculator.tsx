@@ -2,6 +2,8 @@ import { useMemo, useState } from "react";
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 import {
   ChartContainer,
+  ChartLegend,
+  ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
   type ChartConfig,
@@ -17,9 +19,17 @@ import {
 } from "./projections";
 
 const chartConfig = {
-  value: {
-    label: "Valor ilustrativo",
-    color: "var(--primary)",
+  atraso: {
+    label: "Atraso",
+    color: "oklch(0.62 0.05 55)",
+  },
+  base: {
+    label: "Base",
+    color: "oklch(0.73 0.11 55)",
+  },
+  antecipada: {
+    label: "Antecipada",
+    color: "oklch(0.86 0.03 80)",
   },
 } satisfies ChartConfig;
 
@@ -60,11 +70,30 @@ export function RoiCalculator() {
 
   const chartData = useMemo(
     () => [
-      { horizon: "Entrada", years: 0, value: Math.max(0, amount) },
+      {
+        horizon: "Entrada",
+        years: 0,
+        atraso: Math.max(0, amount),
+        base: Math.max(0, amount),
+        antecipada: Math.max(0, amount),
+      },
       ...rows.map((row) => ({
         horizon: row.horizon,
         years: row.years,
-        value: row.value,
+        atraso: projectValue(
+          amount,
+          getScenario("atraso").projections.find((item) => item.years === row.years)?.multiplier ??
+            0,
+        ),
+        base: projectValue(
+          amount,
+          getScenario("base").projections.find((item) => item.years === row.years)?.multiplier ?? 0,
+        ),
+        antecipada: projectValue(
+          amount,
+          getScenario("antecipada").projections.find((item) => item.years === row.years)
+            ?.multiplier ?? 0,
+        ),
       })),
     ],
     [amount, rows],
@@ -80,11 +109,7 @@ export function RoiCalculator() {
           {formatUSD(amount)}
         </p>
         <p className="mt-2 text-sm text-muted-foreground">{selectedTicket.title}</p>
-        <div
-          role="radiogroup"
-          aria-label="Selecione o investimento"
-          className="mt-6 grid gap-2"
-        >
+        <div role="radiogroup" aria-label="Selecione o investimento" className="mt-6 grid gap-2">
           {investmentOptions.map((ticket) => {
             const active = ticket.id === ticketId;
             const sold = ticket.lotsAvailable <= 0;
@@ -117,9 +142,7 @@ export function RoiCalculator() {
           })}
         </div>
 
-        <p className="mt-10 text-xs uppercase tracking-[0.25em] text-muted-foreground">
-          Cenário
-        </p>
+        <p className="mt-10 text-xs uppercase tracking-[0.25em] text-muted-foreground">Cenário</p>
         <div
           role="radiogroup"
           aria-label="Cenário de infraestrutura"
@@ -170,16 +193,20 @@ export function RoiCalculator() {
 
         <div className="mt-8 border border-border bg-card p-4 sm:p-6">
           <p className="text-[10px] uppercase tracking-[0.25em] text-muted-foreground">
-            Três horizontes · {scenario.label}
+            Comparação dos três cenários
           </p>
           <ChartContainer config={chartConfig} className="mt-4 aspect-[16/7] w-full">
-            <AreaChart data={chartData} margin={{ left: 8, right: 8, top: 8, bottom: 0 }}>
+            <AreaChart
+              key={ticketId}
+              data={chartData}
+              margin={{ left: 8, right: 8, top: 8, bottom: 0 }}
+              isAnimationActive
+              animationDuration={700}
+              animationEasing="ease-out"
+            >
               <CartesianGrid vertical={false} strokeDasharray="3 3" />
               <XAxis dataKey="horizon" tickLine={false} axisLine={false} tickMargin={8} />
-              <YAxis
-                hide
-                domain={[0, (dataMax: number) => Math.max(dataMax * 1.05, 1)]}
-              />
+              <YAxis hide domain={[0, (dataMax: number) => Math.max(dataMax * 1.05, 1)]} />
               <ChartTooltip
                 cursor={false}
                 content={
@@ -192,13 +219,36 @@ export function RoiCalculator() {
                   />
                 }
               />
+              <ChartLegend content={<ChartLegendContent />} />
               <Area
-                dataKey="value"
+                dataKey="atraso"
+                name="Atraso"
                 type="monotone"
-                fill="var(--color-value)"
-                fillOpacity={0.18}
-                stroke="var(--color-value)"
-                strokeWidth={1.5}
+                fill="var(--color-atraso)"
+                fillOpacity={0.04}
+                stroke="var(--color-atraso)"
+                strokeWidth={1.2}
+                activeDot={{ r: 4, fill: "var(--color-atraso)" }}
+              />
+              <Area
+                dataKey="base"
+                name="Base"
+                type="monotone"
+                fill="var(--color-base)"
+                fillOpacity={0.08}
+                stroke="var(--color-base)"
+                strokeWidth={1.8}
+                activeDot={{ r: 4, fill: "var(--color-base)" }}
+              />
+              <Area
+                dataKey="antecipada"
+                name="Antecipada"
+                type="monotone"
+                fill="var(--color-antecipada)"
+                fillOpacity={0.04}
+                stroke="var(--color-antecipada)"
+                strokeWidth={1.2}
+                activeDot={{ r: 4, fill: "var(--color-antecipada)" }}
               />
             </AreaChart>
           </ChartContainer>
@@ -217,14 +267,12 @@ export function RoiCalculator() {
         </button>
         {showPremises && (
           <div id="roi-premissas">
-            <p className="mt-6 text-[10px] uppercase tracking-[0.35em] text-primary">
-              Premissas
-            </p>
+            <p className="mt-6 text-[10px] uppercase tracking-[0.35em] text-primary">Premissas</p>
             <h3 className="mt-3 font-serif text-2xl text-foreground">Premissas ilustrativas</h3>
             <p className="mt-4 max-w-3xl text-sm leading-relaxed text-muted-foreground">
-              O capital de entrada é o preço fixo do lote de cada projeto do portfólio.
-              Os múltiplos de horizonte continuam hipotéticos — não há fluxo de caixa,
-              título nem mercado. O motor é um múltiplo de valor terminal, não uma DCF.
+              O capital de entrada é o preço fixo do lote de cada projeto do portfólio. Os múltiplos
+              de horizonte continuam hipotéticos — não há fluxo de caixa, título nem mercado. O
+              motor é um múltiplo de valor terminal, não uma DCF.
             </p>
             <div className="mt-8 grid gap-8 md:grid-cols-3">
               {scenarios.map((item) => (

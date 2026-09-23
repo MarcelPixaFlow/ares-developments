@@ -328,7 +328,7 @@ export function ContactCta() {
             ) : null}
 
             {error ? (
-              <p className="text-sm text-primary" role="alert">
+              <p className="text-sm text-muted-foreground" role="alert">
                 {error}
               </p>
             ) : null}

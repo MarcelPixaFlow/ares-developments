@@ -32,30 +32,25 @@ function Index() {
 
       <main>
         {/* Hero */}
-        <section className="relative flex min-h-screen items-center justify-center overflow-hidden">
+        <section className="relative flex min-h-screen items-end overflow-hidden">
           <img
             src={heroImage}
             alt="Paisagem rochosa de Marte no Arcana Valley ao entardecer"
             className="absolute inset-0 h-full w-full object-cover"
           />
-          <div className="absolute inset-0 bg-background/75" />
-          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-background/80" />
-
-          <div className="relative mx-auto max-w-4xl px-6 py-32 text-center">
-            <p className="text-[10px] uppercase tracking-[0.4em] text-muted-foreground">
-              Arcana Valley · Marte
-            </p>
-            <h1 className="mt-8 font-serif text-4xl leading-[1.15] text-foreground sm:text-5xl lg:text-6xl">
-              Marte: O Próximo Grande Salto Para Seu Portfólio.
+          <div className="relative mb-16 ml-0 max-w-2xl px-6 py-10 text-left sm:mb-20 sm:px-10 lg:ml-[8%]">
+            <div className="absolute inset-0 -z-10 bg-gradient-to-r from-black/75 via-black/45 to-transparent blur-[0.5px]" />
+            <p className="text-[10px] uppercase tracking-[0.4em] text-[#c69a6d]">Arcana Valley</p>
+            <h1 className="mt-5 max-w-xl font-serif text-4xl leading-[1.05] text-white sm:text-5xl lg:text-6xl">
+              Um novo horizonte de capital.
             </h1>
-            <p className="mx-auto mt-8 max-w-2xl text-base leading-relaxed text-muted-foreground">
-              Investimento exclusivo em terrenos e projetos primordiais no Arcana
-              Valley.
+            <p className="mt-5 text-xs uppercase tracking-[0.16em] text-white/65">
+              Cidadela Helios · US$ 2.400.000 por lote
             </p>
-            <div className="mt-12 flex flex-col items-center justify-center gap-4 sm:flex-row">
+            <div className="mt-9 flex flex-col items-start gap-4 sm:flex-row">
               <a
                 href="#contato"
-                className="inline-flex w-full items-center justify-center bg-primary px-10 py-4 text-xs uppercase tracking-[0.2em] text-primary-foreground transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary sm:w-auto"
+                className="inline-flex w-full items-center justify-center bg-[#c98c58] px-10 py-4 text-xs uppercase tracking-[0.2em] text-[#1b120d] transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary sm:w-auto"
               >
                 Falar com Especialista
               </a>

@@ -52,16 +52,14 @@ export const projects: Project[] = [
     description: "Instalações de luxo para executivos e pesquisadores.",
     images: [modularHabitats, modularHabitatKitchen, modularHabitatQuarto],
     status: "Conceito",
-    program:
-      "Unidades de estadia para equipe e pesquisa, ligadas à malha de energia e ar.",
+    program: "Unidades de estadia para equipe e pesquisa, ligadas à malha de energia e ar.",
     demand: "Ocupação temporária de alto valor, antes da colônia cheia.",
     ...commercialBySlug("habitats-modulares"),
   },
   {
     id: "mars-retail-arcology",
     title: "Mars Retail Arcology",
-    description:
-      "Mega complexo comercial e de entretenimento para turismo interplanetário.",
+    description: "Mega complexo comercial e de entretenimento para turismo interplanetário.",
     images: [
       retailArcology,
       retailArcologyAlimentacao,
@@ -70,8 +68,7 @@ export const projects: Project[] = [
     ],
     status: "Conceito",
     ...commercialBySlug("mars-retail-arcology"),
-    program:
-      "Volume comercial e de encontro sob cúpula, dependente de fluxo que ainda não existe.",
+    program: "Volume comercial e de encontro sob cúpula, dependente de fluxo que ainda não existe.",
     demand: "Só depois dos âncoras de morar, saúde e logística. Último na fila.",
   },
   {

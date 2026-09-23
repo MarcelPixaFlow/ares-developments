@@ -2,7 +2,6 @@ import { useEffect, useMemo, useRef, useState, type FormEvent, type ReactNode } 
 import { Link } from "@tanstack/react-router";
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 import {
-  ArrowUpRight,
   Database,
   FileDown,
   Inbox,
@@ -11,7 +10,6 @@ import {
   Server,
   Sparkles,
   Timer,
-  TrendingUp,
 } from "lucide-react";
 import { AresLogo } from "@/features/site/AresLogo";
 import { formatUSD } from "@/features/roi/projections";
@@ -37,7 +35,6 @@ import {
   API_META,
   FALLBACK_LEADS,
   FALLBACK_PROJECTS,
-  KPI_TRENDS,
   availableLots,
   buildRevenueByProject,
   isSoldStatus,
@@ -48,7 +45,6 @@ import {
   type ApiStatus,
   type DashboardLead,
   type DashboardProject,
-  type KpiTrend,
 } from "./data";
 import { authHeaders, clearDashboardKey, readDashboardKey, saveDashboardKey } from "./auth";
 
@@ -77,67 +73,29 @@ const integerFormatter = new Intl.NumberFormat("pt-BR", { maximumFractionDigits:
 function statusClass(status: string): string {
   const value = status.toLowerCase();
   if (value.includes("dispon") || value.includes("sítio") || value.includes("sitio")) {
-    return "text-emerald-400";
+    return "text-[#c69a6d]";
   }
-  if (value.includes("esgot")) return "text-rose-400";
-  if (value.includes("constru") || value.includes("render")) return "text-amber-400";
+  if (value.includes("esgot")) return "text-muted-foreground";
+  if (value.includes("constru") || value.includes("render")) return "text-[#c69a6d]";
   return "text-muted-foreground";
-}
-
-function useCountUp(target: number, enabled: boolean, duration = 900): number {
-  const [value, setValue] = useState(0);
-
-  useEffect(() => {
-    if (!enabled) {
-      setValue(0);
-      return;
-    }
-
-    const start = performance.now();
-    let frame = 0;
-    const tick = (now: number) => {
-      const progress = Math.min(1, (now - start) / duration);
-      const eased = 1 - (1 - progress) ** 3;
-      setValue(target * eased);
-      if (progress < 1) frame = requestAnimationFrame(tick);
-    };
-    frame = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(frame);
-  }, [target, enabled, duration]);
-
-  return value;
 }
 
 function MetricCard({
   label,
   value,
   ready,
-  trend,
   format,
 }: {
   label: string;
   value: number;
   ready: boolean;
-  trend: KpiTrend;
   format: (n: number) => string;
 }) {
-  const animated = useCountUp(value, ready);
-
   return (
-    <article className="rounded-xl border border-border bg-card p-5">
+    <article className="border border-border bg-card p-5">
       <p className="text-[11px] uppercase tracking-[0.2em] text-muted-foreground">{label}</p>
       <p className="mt-3 font-serif text-4xl tabular-nums tracking-tight text-foreground">
-        {ready ? format(animated) : "—"}
-      </p>
-      <p
-        className={cn(
-          "mt-3 flex items-center gap-1.5 text-xs",
-          trend.positive ? "text-emerald-400/85" : "text-rose-400/85",
-        )}
-      >
-        <TrendingUp className="h-3.5 w-3.5" aria-hidden="true" />
-        <span className="tabular-nums">{trend.pct}</span>
-        <span className="text-muted-foreground">{trend.caption}</span>
+        {ready ? format(value) : "—"}
       </p>
     </article>
   );
@@ -180,16 +138,16 @@ function ApiStatusBadge({
             type="button"
             className={cn(
               "inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1.5 text-xs transition-colors hover:border-primary/70",
-              status === "online" && "text-emerald-400",
-              status === "offline" && "text-amber-400",
+              status === "online" && "text-[#c69a6d]",
+              status === "offline" && "text-muted-foreground",
               status === "loading" && "text-muted-foreground",
             )}
           >
             <span
               className={cn(
                 "h-1.5 w-1.5 rounded-full",
-                status === "online" && "bg-emerald-400",
-                status === "offline" && "bg-amber-400",
+                status === "online" && "bg-[#c69a6d]",
+                status === "offline" && "bg-muted-foreground",
                 status === "loading" && "animate-pulse bg-muted-foreground",
               )}
               aria-hidden="true"
@@ -318,7 +276,7 @@ function GateScreen({
     <div className="flex min-h-screen items-center justify-center bg-background px-6">
       <form
         onSubmit={onSubmit}
-        className="w-full max-w-md rounded-xl border border-border bg-card p-8"
+        className="w-full max-w-md border border-border bg-card p-8"
       >
         <AresLogo />
         <p className="mt-6 text-[10px] uppercase tracking-[0.35em] text-muted-foreground">
@@ -335,13 +293,13 @@ function GateScreen({
             value={password}
             onChange={(event) => onPasswordChange(event.target.value)}
             autoComplete="current-password"
-            className="mt-2 w-full rounded-lg border border-border bg-background px-3 py-2.5 text-sm text-foreground outline-none focus-visible:border-primary"
+            className="mt-2 w-full border border-border bg-background px-3 py-2.5 text-sm text-foreground outline-none focus-visible:border-primary"
           />
         </label>
-        {error ? <p className="mt-3 text-sm text-rose-400">{error}</p> : null}
+        {error ? <p className="mt-3 text-sm text-muted-foreground">{error}</p> : null}
         <button
           type="submit"
-          className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm text-primary-foreground transition-opacity hover:opacity-90"
+          className="mt-6 inline-flex w-full items-center justify-center gap-2 bg-primary px-4 py-2.5 text-sm text-primary-foreground transition-opacity hover:opacity-90"
         >
           <Lock className="h-4 w-4" aria-hidden="true" />
           Entrar
@@ -547,7 +505,7 @@ export function Dashboard() {
                 onClick={() => setView(item.id)}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "rounded-lg px-3.5 py-2.5 text-left text-sm transition-colors",
+                  "px-3.5 py-2.5 text-left text-sm transition-colors",
                   active
                     ? "bg-primary/20 text-foreground"
                     : "text-muted-foreground hover:bg-secondary hover:text-foreground",
@@ -563,7 +521,7 @@ export function Dashboard() {
           <button
             type="button"
             onClick={lock}
-            className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-border px-3 py-2 text-xs uppercase tracking-[0.18em] text-muted-foreground transition-colors hover:border-primary hover:text-foreground"
+            className="inline-flex w-full items-center justify-center gap-2 border border-border px-3 py-2 text-xs uppercase tracking-[0.18em] text-muted-foreground transition-colors hover:border-primary hover:text-foreground"
           >
             <LogOut className="h-3.5 w-3.5" aria-hidden="true" />
             Sair
@@ -592,41 +550,29 @@ export function Dashboard() {
                 label="Lotes Vendidos"
                 value={soldLots}
                 ready={ready}
-                trend={KPI_TRENDS.soldLots}
                 format={(n) => integerFormatter.format(Math.round(n))}
               />
               <MetricCard
                 label="Lotes Disponíveis"
                 value={remainingLots}
                 ready={ready}
-                trend={{
-                  ...KPI_TRENDS.availableLots,
-                  caption: inventoryLots ? `de ${integerFormatter.format(inventoryLots)} unidades` : KPI_TRENDS.availableLots.caption,
-                }}
                 format={(n) => integerFormatter.format(Math.round(n))}
               />
               <MetricCard
                 label="Receita em Estoque"
                 value={revenue}
                 ready={ready}
-                trend={{
-                  ...KPI_TRENDS.revenue,
-                  caption: bookedRevenue
-                    ? `${formatUSD(bookedRevenue)} já realizada`
-                    : KPI_TRENDS.revenue.caption,
-                }}
                 format={formatUSD}
               />
               <MetricCard
                 label="Novos Leads"
                 value={leads.length}
                 ready={ready}
-                trend={KPI_TRENDS.leads}
                 format={(n) => integerFormatter.format(Math.round(n))}
               />
             </div>
 
-            <article className="rounded-xl border border-border bg-card p-5">
+            <article className="border border-border bg-card p-5">
               <div className="mb-4 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
                 <div>
                   <p className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
@@ -673,7 +619,7 @@ export function Dashboard() {
               <button
                 type="button"
                 onClick={() => setView("portfolio")}
-                className="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm text-primary-foreground transition-opacity hover:opacity-90"
+                className="inline-flex items-center justify-center gap-2 bg-primary px-4 py-2.5 text-sm text-primary-foreground transition-opacity hover:opacity-90"
               >
                 Registrar venda
               </button>
@@ -689,7 +635,7 @@ export function Dashboard() {
                     projects,
                   })
                 }
-                className="inline-flex items-center justify-center gap-2 rounded-lg border border-border bg-card px-4 py-2.5 text-sm text-foreground transition-colors hover:border-primary/70"
+                className="inline-flex items-center justify-center gap-2 border border-border bg-card px-4 py-2.5 text-sm text-foreground transition-colors hover:border-primary/70"
               >
                 <FileDown className="h-4 w-4 text-primary" aria-hidden="true" />
                 Exportar Relatório PDF
@@ -697,7 +643,7 @@ export function Dashboard() {
               <button
                 type="button"
                 onClick={() => setSimulateOpen(true)}
-                className="inline-flex items-center justify-center gap-2 rounded-lg border border-border bg-card px-4 py-2.5 text-sm text-foreground transition-colors hover:border-primary/70"
+                className="inline-flex items-center justify-center gap-2 border border-border bg-card px-4 py-2.5 text-sm text-foreground transition-colors hover:border-primary/70"
               >
                 <Sparkles className="h-4 w-4 text-primary" aria-hidden="true" />
                 Simular tese 5,5×
@@ -712,7 +658,7 @@ export function Dashboard() {
                 rows={leads.map((lead) => [
                   lead.nome,
                   lead.project?.nome ?? "—",
-                  { text: "Novo", className: "text-emerald-400" },
+                  { text: "Novo", className: "text-[#c69a6d]" },
                 ])}
               />
               <DataTable
@@ -725,7 +671,7 @@ export function Dashboard() {
                   {
                     text: `${project.lotes_disponiveis ?? 0} / ${project.lotes_total ?? 0}`,
                     className:
-                      (project.lotes_disponiveis ?? 0) > 0 ? "text-emerald-400" : "text-rose-400",
+                      (project.lotes_disponiveis ?? 0) > 0 ? "text-[#c69a6d]" : "text-muted-foreground",
                   },
                   { text: project.status, className: statusClass(project.status) },
                 ])}
@@ -735,13 +681,13 @@ export function Dashboard() {
         )}
 
         {view === "portfolio" && (
-          <section className="overflow-hidden rounded-xl border border-border bg-card">
+          <section className="overflow-hidden border border-border bg-card">
             <div className="border-b border-border px-5 py-4">
               <h2 className="font-serif text-xl text-foreground">Portfólio de Projetos</h2>
               <p className="mt-1 text-sm text-muted-foreground">
                 Informe a quantidade e registre a venda. O estoque no SQLite, a receita e os KPIs atualizam na hora.
               </p>
-              {saleError ? <p className="mt-2 text-sm text-rose-400">{saleError}</p> : null}
+              {saleError ? <p className="mt-2 text-sm text-muted-foreground">{saleError}</p> : null}
               {status === "offline" ? (
                 <p className="mt-2 text-sm text-amber-400">
                   API offline — vendas só são gravadas com o backend ligado.
@@ -772,7 +718,7 @@ export function Dashboard() {
                         <td
                           className={cn(
                             "px-5 py-3",
-                            available > 0 ? "text-emerald-400" : "text-rose-400",
+                            available > 0 ? "text-[#c69a6d]" : "text-muted-foreground",
                           )}
                         >
                           {available} / {project.lotes_total ?? 0}
@@ -797,13 +743,13 @@ export function Dashboard() {
                                     : 1,
                                 }));
                               }}
-                              className="h-8 w-16 rounded-lg border border-border bg-background px-2 text-right text-xs tabular-nums text-foreground outline-none focus:border-primary disabled:opacity-40"
+                              className="h-8 w-16 border border-border bg-background px-2 text-right text-xs tabular-nums text-foreground outline-none focus:border-primary disabled:opacity-40"
                             />
                             <button
                               type="button"
                               disabled={!canSell || quantidade < 1 || quantidade > available}
                               onClick={() => void registerSale(project)}
-                              className="rounded-lg border border-border px-3 py-1.5 text-xs uppercase tracking-[0.16em] text-foreground transition-colors hover:border-primary disabled:cursor-not-allowed disabled:opacity-40"
+                              className="border border-border px-3 py-1.5 text-xs uppercase tracking-[0.16em] text-foreground transition-colors hover:border-primary disabled:cursor-not-allowed disabled:opacity-40"
                             >
                               {saleBusyId === project.id
                                 ? "Gravando…"
@@ -831,13 +777,13 @@ export function Dashboard() {
               lead.nome,
               lead.email || "—",
               lead.project?.nome ?? "—",
-              { text: "Novo", className: "text-emerald-400" },
+              { text: "Novo", className: "text-[#c69a6d]" },
             ])}
           />
         )}
 
         {view === "settings" && (
-          <article className="max-w-xl rounded-xl border border-border bg-card p-6">
+          <article className="max-w-xl border border-border bg-card p-6">
             <h2 className="font-serif text-xl text-foreground">Configurações</h2>
             <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
               Endpoint da API: <span className="text-foreground">{API_BASE}</span>
@@ -870,9 +816,8 @@ export function Dashboard() {
             </div>
             <div className="flex items-center justify-between gap-4">
               <dt className="text-muted-foreground">Valor projetado em 2035</dt>
-              <dd className="flex items-center gap-1.5 tabular-nums text-emerald-400">
+              <dd className="tabular-nums text-[#c69a6d]">
                 {formatUSD(simulatedHorizon)}
-                <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
               </dd>
             </div>
           </dl>
@@ -898,7 +843,7 @@ function DataTable({
   emptyState?: ReactNode;
 }) {
   return (
-    <section className="overflow-hidden rounded-xl border border-border bg-card">
+    <section className="overflow-hidden border border-border bg-card">
       <div className="border-b border-border px-5 py-4">
         <h2 className="font-serif text-xl text-foreground">{title}</h2>
       </div>
