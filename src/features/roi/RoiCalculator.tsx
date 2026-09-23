@@ -6,17 +6,15 @@ import {
   ChartTooltipContent,
   type ChartConfig,
 } from "@/components/ui/chart";
+import { heliosCommercial, projects } from "@/features/portfolio/data";
 import {
   formatUSD,
   formatUSDAmount,
   getScenario,
-  parseAmount,
   projectValue,
   scenarios,
   type ScenarioId,
 } from "./projections";
-
-const PRESETS = [100_000, 250_000, 1_000_000, 5_000_000];
 
 const chartConfig = {
   value: {
@@ -25,10 +23,30 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
+const investmentOptions = [
+  ...projects.map((project) => ({
+    id: project.id,
+    title: project.title,
+    price: project.price,
+    lotsAvailable: project.lotsAvailable,
+    lotsTotal: project.lotsTotal,
+  })),
+  {
+    id: heliosCommercial.id,
+    title: heliosCommercial.title,
+    price: heliosCommercial.price,
+    lotsAvailable: heliosCommercial.lotsAvailable,
+    lotsTotal: heliosCommercial.lotsTotal,
+  },
+].sort((a, b) => a.price - b.price);
+
 export function RoiCalculator() {
-  const [amount, setAmount] = useState(250000);
+  const [ticketId, setTicketId] = useState("ares-colony");
   const [scenarioId, setScenarioId] = useState<ScenarioId>("base");
   const [showPremises, setShowPremises] = useState(false);
+  const selectedTicket =
+    investmentOptions.find((item) => item.id === ticketId) ?? investmentOptions[0]!;
+  const amount = selectedTicket.price;
   const scenario = getScenario(scenarioId);
 
   const rows = useMemo(
@@ -55,40 +73,45 @@ export function RoiCalculator() {
   return (
     <div className="grid gap-10 lg:grid-cols-12 lg:gap-16">
       <div className="lg:col-span-5">
-        <label
-          htmlFor="investment"
-          className="block text-xs uppercase tracking-[0.25em] text-muted-foreground"
+        <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground">
+          Selecione o investimento
+        </p>
+        <p className="mt-4 font-serif text-3xl tabular-nums text-foreground sm:text-4xl">
+          {formatUSD(amount)}
+        </p>
+        <p className="mt-2 text-sm text-muted-foreground">{selectedTicket.title}</p>
+        <div
+          role="radiogroup"
+          aria-label="Selecione o investimento"
+          className="mt-6 grid gap-2"
         >
-          Capital de entrada (US$)
-        </label>
-        <div className="mt-4 flex items-center gap-3 border-b border-border pb-3 focus-within:border-primary">
-          <span className="shrink-0 font-serif text-2xl text-muted-foreground">US$</span>
-          <input
-            id="investment"
-            inputMode="numeric"
-            value={amount ? formatUSDAmount(amount) : ""}
-            onChange={(e) => setAmount(parseAmount(e.target.value))}
-            placeholder="250.000"
-            className="w-full min-w-0 bg-transparent font-serif text-3xl tabular-nums text-foreground outline-none placeholder:text-muted-foreground/50 sm:text-4xl"
-            aria-describedby="roi-disclaimer"
-          />
-        </div>
-        <div className="mt-6 flex flex-wrap gap-2">
-          {PRESETS.map((preset) => {
-            const active = amount === preset;
+          {investmentOptions.map((ticket) => {
+            const active = ticket.id === ticketId;
+            const sold = ticket.lotsAvailable <= 0;
             return (
               <button
-                key={preset}
+                key={ticket.id}
                 type="button"
-                onClick={() => setAmount(preset)}
-                aria-pressed={active}
-                className={`rounded-full border px-4 py-1.5 text-xs tracking-wide transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ${
+                role="radio"
+                aria-checked={active}
+                onClick={() => setTicketId(ticket.id)}
+                className={`rounded-lg border px-4 py-3 text-left transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ${
                   active
-                    ? "border-primary text-foreground"
+                    ? "border-primary bg-primary/15 text-foreground ring-1 ring-primary"
                     : "border-border text-muted-foreground hover:border-primary hover:text-foreground"
                 }`}
               >
-                {formatUSD(preset)}
+                <span className="flex items-center justify-between gap-3">
+                  <span className="font-serif text-sm text-foreground">{ticket.title}</span>
+                  <span className="font-serif text-sm tabular-nums text-foreground">
+                    {formatUSD(ticket.price)}
+                  </span>
+                </span>
+                <span className="mt-1 block text-[11px] uppercase tracking-[0.14em]">
+                  {sold
+                    ? "Esgotado"
+                    : `${ticket.lotsAvailable} / ${ticket.lotsTotal} lotes disponíveis`}
+                </span>
               </button>
             );
           })}
@@ -199,8 +222,9 @@ export function RoiCalculator() {
             </p>
             <h3 className="mt-3 font-serif text-2xl text-foreground">Premissas ilustrativas</h3>
             <p className="mt-4 max-w-3xl text-sm leading-relaxed text-muted-foreground">
-              Exercício hipotético. Não há fluxo de caixa, título nem mercado. O motor é um
-              múltiplo de valor terminal sobre o capital de entrada — não uma DCF.
+              O capital de entrada é o preço fixo do lote de cada projeto do portfólio.
+              Os múltiplos de horizonte continuam hipotéticos — não há fluxo de caixa,
+              título nem mercado. O motor é um múltiplo de valor terminal, não uma DCF.
             </p>
             <div className="mt-8 grid gap-8 md:grid-cols-3">
               {scenarios.map((item) => (

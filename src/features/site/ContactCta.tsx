@@ -1,44 +1,70 @@
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useMemo, useState, type FormEvent } from "react";
 import { formatUSD } from "@/features/roi/projections";
-
-const TICKETS = [100_000, 250_000, 1_000_000, 5_000_000] as const;
-
-type Ticket = (typeof TICKETS)[number];
+import { cn } from "@/lib/utils";
+import {
+  API_BASE,
+  FALLBACK_PROJECTS,
+  isSoldStatus,
+  type DashboardProject,
+} from "@/features/dashboard/data";
 
 type Inquiry = {
   name: string;
   email: string;
-  ticket: Ticket;
+  ticket: number;
   message: string;
+  projectName: string;
   recordedAt: string;
 };
-
-const STORAGE_KEY = "ares-inquiry";
-
-function readStoredInquiry(): Inquiry | null {
-  if (typeof window === "undefined") return null;
-  try {
-    const raw = window.sessionStorage.getItem(STORAGE_KEY);
-    if (!raw) return null;
-    return JSON.parse(raw) as Inquiry;
-  } catch {
-    return null;
-  }
-}
 
 export function ContactCta() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [ticket, setTicket] = useState<Ticket>(250_000);
   const [message, setMessage] = useState("");
+  const [projectId, setProjectId] = useState<number | "">("");
+  const [projects, setProjects] = useState<DashboardProject[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [inquiry, setInquiry] = useState<Inquiry | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+  const [apiOnline, setApiOnline] = useState<boolean | null>(null);
+  const selectedProject = useMemo(
+    () => projects.find((project) => project.id === projectId),
+    [projects, projectId],
+  );
+  const ticket = selectedProject?.preco_base ?? 0;
+  const orderedProjects = useMemo(
+    () => [...projects].sort((a, b) => a.preco_base - b.preco_base),
+    [projects],
+  );
 
   useEffect(() => {
-    setInquiry(readStoredInquiry());
+    const controller = new AbortController();
+
+    async function loadProjects() {
+      try {
+        const response = await fetch(`${API_BASE}/projects`, { signal: controller.signal });
+        if (!response.ok) throw new Error("API error");
+        const next = (await response.json()) as DashboardProject[];
+        setProjects(next);
+        setApiOnline(true);
+        const preferred = next.find((project) => !isSoldStatus(project.status)) ?? next[0];
+        setProjectId(preferred?.id ?? "");
+      } catch (loadError) {
+        if (loadError instanceof DOMException && loadError.name === "AbortError") return;
+        setProjects(FALLBACK_PROJECTS);
+        setApiOnline(false);
+        const preferred =
+          FALLBACK_PROJECTS.find((project) => !isSoldStatus(project.status)) ??
+          FALLBACK_PROJECTS[0];
+        setProjectId(preferred?.id ?? "");
+      }
+    }
+
+    void loadProjects();
+    return () => controller.abort();
   }, []);
 
-  const onSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const trimmedName = name.trim();
     const trimmedEmail = email.trim();
@@ -50,33 +76,51 @@ export function ContactCta() {
       setError("Informe um e-mail válido.");
       return;
     }
-
-    const recorded: Inquiry = {
-      name: trimmedName,
-      email: trimmedEmail,
-      ticket,
-      message: message.trim(),
-      recordedAt: new Date().toISOString(),
-    };
-
-    try {
-      window.sessionStorage.setItem(STORAGE_KEY, JSON.stringify(recorded));
-    } catch {
-      // Sem storage: o estado em tela ainda confirma o registro local.
+    if (projectId === "") {
+      setError("Selecione um projeto de interesse.");
+      return;
     }
 
+    setSubmitting(true);
     setError(null);
-    setInquiry(recorded);
+
+    try {
+      const response = await fetch(`${API_BASE}/leads`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          nome: trimmedName,
+          email: trimmedEmail,
+          project_id: projectId,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("API error");
+      }
+
+      const created = (await response.json()) as { project?: { nome?: string } };
+      setInquiry({
+        name: trimmedName,
+        email: trimmedEmail,
+        ticket,
+        message: message.trim(),
+        projectName: created.project?.nome ?? projects.find((item) => item.id === projectId)?.nome ?? "—",
+        recordedAt: new Date().toISOString(),
+      });
+      setName("");
+      setEmail("");
+      setMessage("");
+    } catch {
+      setError("Não foi possível registrar o lead. Confirme se a API está em execução.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const resetForm = () => {
     setInquiry(null);
     setError(null);
-    try {
-      window.sessionStorage.removeItem(STORAGE_KEY);
-    } catch {
-      // ignore
-    }
   };
 
   return (
@@ -89,8 +133,9 @@ export function ContactCta() {
           Reunião privada sobre a tese e o veículo descritos acima.
         </p>
         <p className="mt-6 max-w-xl text-xs leading-relaxed text-muted-foreground">
-          Este formulário não envia e-mail e não há backend neste conceito.
-          O pedido fica registrado apenas neste navegador, nesta sessão.
+          O pedido é gravado no backend e aparece no painel administrativo. O ticket
+          é o preço fixo do lote do projeto escolhido; a mensagem fica só neste ecrã
+          de confirmação.
         </p>
         <a
           href="#tese"
@@ -108,14 +153,14 @@ export function ContactCta() {
             aria-live="polite"
           >
             <p className="text-[10px] uppercase tracking-[0.3em] text-primary">
-              Pedido registrado neste navegador
+              Lead registado na API
             </p>
             <h3 className="mt-4 font-serif text-2xl text-foreground">
-              Recebemos os dados localmente.
+              Pedido enviado à fila institucional.
             </h3>
             <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
-              Nada foi enviado a um servidor. Não há fila de relações institucionais
-              neste conceito ficcional. Segue o que ficou gravado nesta sessão:
+              Os dados já estão no backend e devem aparecer em Painel → Leads.
+              Segue o resumo do pedido:
             </p>
             <dl className="mt-8 grid gap-4 text-sm">
               <div>
@@ -132,7 +177,13 @@ export function ContactCta() {
               </div>
               <div>
                 <dt className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-                  Ticket
+                  Projeto
+                </dt>
+                <dd className="mt-1 text-foreground">{inquiry.projectName}</dd>
+              </div>
+              <div>
+                <dt className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+                  Preço do lote
                 </dt>
                 <dd className="mt-1 tabular-nums text-foreground">
                   {formatUSD(inquiry.ticket)}
@@ -200,29 +251,56 @@ export function ContactCta() {
               />
             </div>
 
-            <fieldset>
+            <fieldset className="min-w-0">
               <legend className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                Ticket
+                Selecione o investimento
               </legend>
-              <div className="mt-3 flex flex-wrap gap-2">
-                {TICKETS.map((value) => {
-                  const active = ticket === value;
-                  return (
-                    <button
-                      key={value}
-                      type="button"
-                      onClick={() => setTicket(value)}
-                      aria-pressed={active}
-                      className={`rounded-full border px-4 py-1.5 text-xs tracking-wide transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ${
-                        active
-                          ? "border-primary text-foreground"
-                          : "border-border text-muted-foreground hover:border-primary hover:text-foreground"
-                      }`}
-                    >
-                      {formatUSD(value)}
-                    </button>
-                  );
-                })}
+              <div
+                role="radiogroup"
+                aria-label="Projeto de interesse"
+                className="mt-3 grid gap-1.5"
+              >
+                {orderedProjects.length === 0
+                  ? Array.from({ length: 5 }).map((_, index) => (
+                      <div
+                        key={index}
+                        className="h-10 animate-pulse rounded-md border border-border bg-secondary/40"
+                      />
+                    ))
+                  : orderedProjects.map((project) => {
+                      const sold = isSoldStatus(project.status);
+                      const active = project.id === projectId;
+                      return (
+                        <button
+                          key={project.id}
+                          type="button"
+                          role="radio"
+                          aria-checked={active}
+                          onClick={() => setProjectId(project.id)}
+                          className={cn(
+                            "flex items-center justify-between gap-3 rounded-md border px-3 py-2 text-left transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary",
+                            active
+                              ? "border-primary bg-primary/15 ring-1 ring-primary"
+                              : "border-border bg-secondary/30 hover:border-primary/70 hover:bg-secondary/60",
+                            sold && !active && "opacity-70",
+                          )}
+                        >
+                          <span className="min-w-0">
+                            <span className="block truncate text-sm text-foreground">
+                              {project.nome}
+                            </span>
+                            <span className="mt-0.5 block text-[11px] text-muted-foreground">
+                              {sold
+                                ? "Esgotado"
+                                : `${project.lotes_disponiveis ?? 0}/${project.lotes_total ?? 0} lotes`}
+                            </span>
+                          </span>
+                          <span className="shrink-0 text-sm tabular-nums text-foreground">
+                            {formatUSD(project.preco_base)}
+                          </span>
+                        </button>
+                      );
+                    })}
               </div>
             </fieldset>
 
@@ -243,6 +321,12 @@ export function ContactCta() {
               />
             </div>
 
+            {apiOnline === false ? (
+              <p className="text-sm text-amber-400" role="status">
+                API offline. Inicie o backend em 127.0.0.1:8000 para gravar o lead.
+              </p>
+            ) : null}
+
             {error ? (
               <p className="text-sm text-primary" role="alert">
                 {error}
@@ -251,9 +335,10 @@ export function ContactCta() {
 
             <button
               type="submit"
-              className="inline-flex w-full items-center justify-center bg-primary px-8 py-4 text-xs uppercase tracking-[0.2em] text-primary-foreground transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary sm:w-auto"
+              disabled={submitting || apiOnline === false || projects.length === 0}
+              className="inline-flex w-full items-center justify-center bg-primary px-8 py-4 text-xs uppercase tracking-[0.2em] text-primary-foreground transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
             >
-              Registrar pedido
+              {submitting ? "A enviar…" : "Registrar pedido"}
             </button>
           </form>
         )}

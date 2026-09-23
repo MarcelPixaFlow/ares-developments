@@ -173,7 +173,7 @@ function Index() {
               Projeções Hipotéticas
             </p>
             <h2 className="mt-6 max-w-2xl font-serif text-3xl leading-tight text-foreground sm:text-4xl">
-              Simule um cenário ilustrativo de valorização.
+              Simule a valorização a partir do preço fixo de cada lote.
             </h2>
             <div className="mt-16">
               <RoiCalculator />

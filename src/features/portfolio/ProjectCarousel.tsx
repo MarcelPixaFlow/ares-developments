@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { formatUSD } from "@/features/roi/projections";
 import { cn } from "@/lib/utils";
 import type { Project } from "./data";
 
@@ -77,6 +78,12 @@ export function ProjectCarousel({ project }: { project: Project }) {
           {project.status}
         </p>
         <h3 className="mt-3 font-serif text-xl text-foreground">{project.title}</h3>
+        <p className="mt-3 font-serif text-2xl tabular-nums text-foreground">
+          {formatUSD(project.price)}
+        </p>
+        <p className="mt-1 text-xs uppercase tracking-[0.18em] text-muted-foreground">
+          Preço do lote · {project.lotsAvailable} / {project.lotsTotal} disponíveis
+        </p>
         <div className="mt-6 grid gap-4">
           <div>
             <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">

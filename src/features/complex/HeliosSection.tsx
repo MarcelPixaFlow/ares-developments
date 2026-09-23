@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { heliosCommercial } from "@/features/portfolio/data";
+import { formatUSD } from "@/features/roi/projections";
 import { HeliosMap } from "./HeliosMap";
 import { heliosComplex, heliosViewSlots, heliosZones } from "./heliosData";
 
@@ -26,6 +28,13 @@ export function HeliosSection() {
             </p>
             <p className="mt-6 max-w-xl text-sm leading-relaxed text-muted-foreground">
               {heliosComplex.blurb}
+            </p>
+            <p className="mt-6 font-serif text-2xl tabular-nums text-foreground">
+              {formatUSD(heliosCommercial.price)}
+            </p>
+            <p className="mt-1 text-xs uppercase tracking-[0.18em] text-muted-foreground">
+              Preço do lote · {heliosCommercial.lotsAvailable} / {heliosCommercial.lotsTotal}{" "}
+              disponíveis
             </p>
 
             {selected && (
@@ -114,7 +123,7 @@ export function HeliosSection() {
             <div className="relative h-[min(72vh,640px)] overflow-hidden border border-border bg-[#0F0F11]">
               <HeliosMap selectedZoneId={selectedZoneId} onSelectZone={setSelectedZoneId} />
               <p className="pointer-events-none absolute bottom-4 left-4 max-w-[70%] text-[10px] uppercase tracking-[0.25em] text-white/55">
-                Arraste para orbitar · clique num volume para selecionar
+                Arraste para orbitar · role para zoom · clique num volume para selecionar
               </p>
             </div>
           </div>

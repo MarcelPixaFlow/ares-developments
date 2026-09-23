@@ -1,60 +1,82 @@
-# Ares Mars Investments
+# Ares Developments
 
-Este projeto foi construído com o [Lovable](https://lovable.dev).
+Landing corporativa e painel operacional da Ares Developments — tese especulativa de investimento no Arcana Valley, Marte.
 
-## Visão Geral do Projeto
+## Visão geral
 
-*   **Contexto:** Landing page corporativa premium para a Ares Developments, com uma tese de investimento imobiliário fictícia/especulativa em Marte (Arcana Valley) para executivos C-level. A linguagem visual se assemelha a um fundo de investimento de elite ou imobiliária de luxo: contida, sofisticada, orientada a dados e altamente polida.
-*   **Objetivo:** Página única que apresenta a tese, o sítio e o veículo conceitual, uma calculadora interativa de projeções ilustrativas, quatro projetos âncora, a Cidadela Helios (maquete 3D) e um CTA de contato.
-*   **Fluxo do Usuário:** Descobrir a tese no Hero → ler o sítio/veículo → simular projeções → revisar o portfólio → explorar a Cidadela Helios → registrar interesse.
-*   **Páginas:** Página única com navegação âncora: Hero, Tese, Sítio, Projeções, Portfólio, Cidadela Helios e Contato.
+*   **Contexto:** Página premium para executivos C-level, com linguagem de fundo imobiliário de elite.
+*   **Fluxo:** Hero → tese → sítio/veículo → projeções → portfólio → Cidadela Helios → contato. O botão **Acesso interno** abre `/dashboard` (protegido por senha).
+*   **Páginas:** `/` (landing) e `/dashboard` (KPIs, portfólio, leads, registro de venda, configurações).
 
-## Interface e Funcionalidades (Features)
+## Portfólio (preços fixos)
 
-*   **Hero:** Fundo full-viewport com a paisagem do Arcana Valley e overlay escuro. Logo Ares Developments, navegação discreta, título serifado (“Marte: O Próximo Grande Salto Para Seu Portfólio.”) e CTAs “Falar com Especialista” / “Ver Projeções”.
-*   **Tese:** Três pilares — escassez estrutural, horizonte geracional e natureza especulativa.
-*   **Sítio e veículo:** Por que o flanco leste (AV-HX-01), o veículo conceitual (alocação fechada, lock-up geracional) e um cronograma hipotético 2030–2080.
-*   **Calculadora de ROI:** Capital de entrada em USD, presets e três cenários ilustrativos (Atraso, Base, Antecipada) com horizontes de 10, 20 e 50 anos. O cenário Base permanece em +450% / +1.200% / +5.000%. Inclui gráfico de área e premissas expansíveis.
-*   **Aviso legal:** Projeções meramente ilustrativas; resultados não garantidos. Sem oferta de valores mobiliários nem titularidade real em Marte.
-*   **Portfólio:** Quatro âncoras com carrossel de imagens, status, programa e demanda: Ares Colony, Habitats Modulares, Mars Retail Arcology e Centro Médico de Excelência.
-*   **Cidadela Helios:** Novo âncora (AV-HX-01) no flanco leste. Maquete 3D interativa (Three.js) com zonas selecionáveis (núcleo, anel residencial, estufas, pista, solar, hídrica, logística, laboratórios) e vistas de estudo (aérea, oblíqua, núcleo).
-*   **Contato:** Formulário local (nome, e-mail, ticket, mensagem) persistido em `sessionStorage` — sem backend de envio.
-*   **Interatividade:** Navegação âncora suave, menu mobile, hover/focus contidos e responsividade para desktop e mobile.
+O capital de entrada deixou de ser um ticket sugerido. Preço e stock vivem numa única fonte: `src/data/inventory.json`. O seed da API, a landing, o ROI, o formulário e o fallback do painel leem esse ficheiro.
 
-## Design System e UI
+| Projeto | Tipo | Preço do lote | Disponíveis |
+|---|---|---|---|
+| Habitats Modulares | Habitat | US$ 420.000 | 86 / 120 |
+| Centro Médico de Excelência | Comercial | US$ 650.000 | 11 / 18 |
+| Ares Colony | Habitat | US$ 890.000 | 31 / 48 |
+| Mars Retail Arcology | Comercial | US$ 1.200.000 | 0 / 24 (Esgotado) |
+| Cidadela Helios | Infraestrutura | US$ 2.400.000 | 9 / 12 |
 
-*   **Tema:** Dark mode. Fundo principal próximo de `#0F0F11` e superfícies/cards próximas de `#1A1A1D` (tokens em `oklch` no CSS).
-*   **Cores:** Acento primário em vermelho escuro/ferrugem; texto em off-white.
-*   **Tipografia:** `Inter` no corpo e `Playfair Display` nos títulos.
-*   **Estrutura:** Tailwind CSS, espaçamentos generosos, grid de 12 colunas no desktop, bordas contidas e sombras sutis.
+Para alterar números, edite `src/data/inventory.json` e reinicie a API (o seed atualiza projetos existentes pelo `nome`).
 
-## Arquitetura e Restrições Técnicas
+## Interface
 
-*   **Stack:** React 19, TanStack Start / Router, Vite, Tailwind CSS 4, Three.js (Helios), Recharts (ROI).
-*   **Estrutura de pastas:** Feature-based em `src/features/` (`site`, `roi`, `portfolio`, `complex`).
-*   **Boas práticas:** Separação entre UI e lógica, componentes reutilizáveis, fonte única de verdade para projeções/projetos/Helios.
-*   **Restrições de conteúdo:** Não inventar depoimentos, clientes, certificações, aprovações regulatórias, histórico de performance ou alegações de propriedade real de terras em Marte.
+*   **Hero:** Paisagem do Arcana Valley, logo, CTAs “Falar com Especialista” / “Ver Projeções”.
+*   **Tese / sítio:** Escassez estrutural, horizonte geracional, veículo conceitual e cronograma 2030–2080.
+*   **Calculadora de ROI:** Escolhe o projeto; o valor de entrada é o preço fixo do lote. Cenários Atraso / Base / Antecipada (10, 20 e 50 anos). Base: +450% / +1.200% / +5.000%. Múltiplos continuam hipotéticos.
+*   **Portfólio:** Carrossel, preço do lote, stock, status, programa e demanda.
+*   **Cidadela Helios:** Maquete 3D (Three.js), preço US$ 2.400.000 e 9/12 lotes.
+*   **Contato:** Nome, e-mail, projeto, preço fixo do lote e mensagem. Grava em `POST /leads`. Sem API, o envio fica desativado.
+*   **Painel (`/dashboard`):** Senha de acesso (padrão `ares-admin`). Lotes vendidos, lotes disponíveis, receita e leads. Em **Portfólio**, informe a quantidade e registre a venda no SQLite; KPIs atualizam na hora. Polling a cada 8 s. Se a API cair depois do primeiro fetch, não volta ao fallback.
 
----
+## Backend
 
-## Desenvolvido com Lovable
+FastAPI + SQLAlchemy + SQLite em `backend/ares.db` (caminho absoluto a partir de `backend/database.py` — não use um `ares.db` na raiz).
 
-Continue desenvolvendo este projeto no [editor do Lovable](https://lovable.dev/projects/51d5e833-fc80-4d3c-857a-39fa8dd77f92).
+| Método | Rota | Função |
+|---|---|---|
+| GET | `/projects` | Portfólio público |
+| POST | `/projects` | Criar projeto (senha) |
+| POST | `/projects/{id}/sales` | Registrar venda de lote (senha) |
+| GET | `/leads` | Listar leads (senha) |
+| POST | `/leads` | Formulário público de contato |
 
-*   **Entregue mais rápido:** descreva o que você deseja construir e o Lovable cuida do código.
-*   **Sempre sincronizado:** cada alteração feita no Lovable é commitada diretamente neste repositório.
-*   **Controle total:** este código é seu. Faça um push para a branch `main` no GitHub e suas alterações serão sincronizadas de volta ao Lovable, prontas para o seu próximo prompt.
+Senha padrão: `ares-admin`. Front: `VITE_DASHBOARD_PASSWORD`. API: `ARES_DASHBOARD_PASSWORD`. Header: `X-Ares-Key`.
 
-## Desenvolvimento Local
+CORS: `allow_origins=["*"]`. O frontend usa `VITE_API_URL` ou `http://127.0.0.1:8000`.
 
-Prefere trabalhar localmente? Você precisará do Node.js e do npm — [instale com o nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
+O seed atualiza tipo, preço e total de lotes pelo `nome`, mas **não** reseta `lotes_disponiveis` nem `status` — as vendas do painel permanecem no SQLite.
+
+## Desenvolvimento local
+
+Frontend (Node.js + npm):
 
 ```sh
-git clone <url-deste-repositorio>
-cd <nome-do-repositorio>
 npm i
 npm run dev
 ```
 
-Outros scripts: `npm run build`, `npm run preview`, `npm run lint`.
+Backend (Python 3):
+
+```sh
+cd backend
+python -m pip install -r requirements.txt
+python -m uvicorn main:app --reload --host 127.0.0.1 --port 8000
+```
+
+Testes da API: `python -m pytest -q` em `backend/`.  
+Outros scripts do front: `npm run build`, `npm run preview`, `npm run lint`.
+
+## Stack
+
+*   Front: React 19, TanStack Start / Router, Vite, Tailwind CSS 4, Three.js, Recharts.
+*   Back: FastAPI, Uvicorn, SQLAlchemy, SQLite.
+*   Features: `src/features/` (`site`, `roi`, `portfolio`, `complex`, `dashboard`).
+
+## Restrições
+
+Não inventar depoimentos, clientes, certificações, aprovações regulatórias, histórico de performance ou titularidade real de terras em Marte. Projeções de horizonte não são retorno garantido.
 

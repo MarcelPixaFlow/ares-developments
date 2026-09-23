@@ -1,0 +1,49 @@
+{
+  "projects": [
+    {
+      "slug": "habitats-modulares",
+      "nome": "Habitats Modulares",
+      "tipo": "Habitat",
+      "preco_base": 420000,
+      "status": "Disponível",
+      "lotes_total": 120,
+      "lotes_disponiveis": 86
+    },
+    {
+      "slug": "centro-medico",
+      "nome": "Centro Médico de Excelência",
+      "tipo": "Comercial",
+      "preco_base": 650000,
+      "status": "Disponível",
+      "lotes_total": 18,
+      "lotes_disponiveis": 11
+    },
+    {
+      "slug": "ares-colony",
+      "nome": "Ares Colony",
+      "tipo": "Habitat",
+      "preco_base": 890000,
+      "status": "Disponível",
+      "lotes_total": 48,
+      "lotes_disponiveis": 31
+    },
+    {
+      "slug": "mars-retail-arcology",
+      "nome": "Mars Retail Arcology",
+      "tipo": "Comercial",
+      "preco_base": 1200000,
+      "status": "Esgotado",
+      "lotes_total": 24,
+      "lotes_disponiveis": 0
+    },
+    {
+      "slug": "cidadela-helios",
+      "nome": "Cidadela Helios",
+      "tipo": "Infraestrutura",
+      "preco_base": 2400000,
+      "status": "Disponível",
+      "lotes_total": 12,
+      "lotes_disponiveis": 9
+    }
+  ]
+}

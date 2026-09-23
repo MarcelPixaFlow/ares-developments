@@ -383,11 +383,15 @@ export function HeliosMap({ selectedZoneId, onSelectZone }: HeliosMapProps) {
           update: () => void;
           dispose: () => void;
           target: ThreeNamespace.Vector3;
+          minDistance: number;
+          maxDistance: number;
+          enableZoom: boolean;
         }
       | undefined;
     let resizeObserver: ResizeObserver | undefined;
     let camera: ThreeNamespace.PerspectiveCamera | undefined;
     let desiredTarget: ThreeNamespace.Vector3 | undefined;
+    let desiredRadius = 0;
     let THREE: ThreeModule | undefined;
 
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -417,11 +421,32 @@ export function HeliosMap({ selectedZoneId, onSelectZone }: HeliosMapProps) {
       if (zoneId) onSelectRef.current(zoneId);
     };
 
+    const onWheel = (event: WheelEvent) => {
+      if (!controls || !camera) return;
+      event.preventDefault();
+      event.stopPropagation();
+
+      const currentRadius = camera.position.distanceTo(controls.target);
+      if (!Number.isFinite(desiredRadius) || desiredRadius <= 0) {
+        desiredRadius = currentRadius;
+      }
+
+      const lineDelta = event.deltaMode === WheelEvent.DOM_DELTA_LINE ? 16 : 1;
+      const pageDelta = event.deltaMode === WheelEvent.DOM_DELTA_PAGE ? 80 : 1;
+      const pixels = event.deltaY * lineDelta * pageDelta;
+      const step = Math.max(-1, Math.min(1, pixels / 240));
+      desiredRadius = Math.min(
+        controls.maxDistance,
+        Math.max(controls.minDistance, desiredRadius * Math.pow(1.12, step)),
+      );
+    };
+
     const teardown = () => {
       window.cancelAnimationFrame(frameId);
       resizeObserver?.disconnect();
       canvas.removeEventListener("pointerdown", onPointerDown);
       canvas.removeEventListener("pointerup", onPointerUp);
+      canvas.removeEventListener("wheel", onWheel);
       controls?.dispose();
       controls = undefined;
       if (scene) {
@@ -488,17 +513,20 @@ export function HeliosMap({ selectedZoneId, onSelectZone }: HeliosMapProps) {
         desiredTarget = new THREE.Vector3(0, 0.5, 0);
         const nextControls = new OrbitControls(camera, canvas);
         nextControls.enableDamping = true;
-        nextControls.dampingFactor = 0.07;
-        nextControls.minDistance = 10;
-        nextControls.maxDistance = 42;
+        nextControls.dampingFactor = 0.08;
+        nextControls.enableZoom = false;
+        nextControls.minDistance = 8;
+        nextControls.maxDistance = 48;
         nextControls.maxPolarAngle = Math.PI / 2.18;
         nextControls.target.copy(desiredTarget);
         nextControls.autoRotate = !reducedMotion;
         nextControls.autoRotateSpeed = 0.32;
         controls = nextControls;
+        desiredRadius = camera.position.distanceTo(nextControls.target);
 
         canvas.addEventListener("pointerdown", onPointerDown);
         canvas.addEventListener("pointerup", onPointerUp);
+        canvas.addEventListener("wheel", onWheel, { passive: false });
 
         const setSize = () => {
           if (!renderer || !camera) return;
@@ -510,12 +538,24 @@ export function HeliosMap({ selectedZoneId, onSelectZone }: HeliosMapProps) {
           renderer.setSize(width, height, false);
         };
 
+        const zoomOffset = new THREE.Vector3();
         const tick = () => {
           if (disposed || !renderer || !scene || !camera) return;
           const zone = heliosZones.find((item) => item.id === selectedRef.current);
           if (zone && desiredTarget && controls) {
             desiredTarget.set(zone.focus.x, zone.focus.y, zone.focus.z);
             controls.target.lerp(desiredTarget, reducedMotion ? 1 : 0.045);
+          }
+          if (controls) {
+            zoomOffset.copy(camera.position).sub(controls.target);
+            const currentRadius = zoomOffset.length();
+            const nextRadius = reducedMotion
+              ? desiredRadius
+              : currentRadius + (desiredRadius - currentRadius) * 0.12;
+            if (currentRadius > 0.001) {
+              zoomOffset.multiplyScalar(nextRadius / currentRadius);
+              camera.position.copy(controls.target).add(zoomOffset);
+            }
           }
           controls?.update();
           renderer.render(scene, camera);
@@ -548,7 +588,7 @@ export function HeliosMap({ selectedZoneId, onSelectZone }: HeliosMapProps) {
         ref={canvasRef}
         className="h-full w-full touch-none"
         role="img"
-        aria-label="Maquete 3D da Cidadela Helios. Arraste para orbitar. Clique em um volume para selecionar a zona."
+        aria-label="Maquete 3D da Cidadela Helios. Arraste para orbitar. Role para aproximar ou afastar. Clique em um volume para selecionar a zona."
         tabIndex={0}
       />
       <button
